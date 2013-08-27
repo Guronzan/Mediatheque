@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 27 ao?t 2013 13:58:41 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="fr.guronzan.mediatheque.mappingclasses.User" table="user" catalog="Mediatheque">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="string">
+            <column name="Name" length="80" not-null="true" />
+        </property>
+        <property name="forName" type="string">
+            <column name="forName" length="80" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="Password" length="80" not-null="true" />
+        </property>
+        <property name="registrationDate" type="date">
+            <column name="RegistrationDate" length="10" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
