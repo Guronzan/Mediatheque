@@ -1,4 +1,4 @@
-package fr.guronzan.mediatheque.mappingclasses;
+package fr.guronzan.mediatheque.mappingclasses.domain;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -16,11 +16,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import fr.guronzan.mediatheque.mappingclasses.dao.AbstractPersistentObject;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "user", catalog = "mediatheque", uniqueConstraints = { @UniqueConstraint(columnNames = "USER_ID") })
-public class User {
+public class User extends AbstractPersistentObject {
 
 	private int userId;
 	private String name;
