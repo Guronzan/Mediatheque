@@ -1,5 +1,7 @@
 package fr.guronzan.mediatheque.mappingclasses;
 
+import javax.annotation.Resource;
+
 import org.hibernate.Session;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -9,8 +11,11 @@ import fr.guronzan.mediatheque.HibernateUtil;
 import fr.guronzan.mediatheque.mappingclasses.dao.impl.UserDaoImpl;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
 
-public class UserTest {
+public class UserTest extends SpringTests {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Resource
+	private UserDaoImpl userDaoImpl;
 
 	@Test
 	public void testCreateDatabase() {
@@ -26,11 +31,13 @@ public class UserTest {
 		// user.addMovie(movie);
 		// session.save(user);
 
-		final UserDaoImpl userDaoImpl = new UserDaoImpl(
-				session.getSessionFactory());
-		final User userFound = userDaoImpl
-				.getUserByFullName("user1", "prenom1");
-		final User userNotFound = userDaoImpl.getUserByFullName("user2",
+		final User userFound = this.userDaoImpl.getUserByFullName("user1",
+				"prenom1");
+		// final Movie movie = new Movie("film3");
+		// userFound.addMovie(movie);
+		// session.saveOrUpdate(userFound);
+
+		final User userNotFound = this.userDaoImpl.getUserByFullName("user2",
 				"prenom1");
 
 		session.getTransaction().commit();

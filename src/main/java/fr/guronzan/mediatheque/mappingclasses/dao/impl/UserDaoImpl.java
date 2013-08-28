@@ -16,6 +16,7 @@ import fr.guronzan.mediatheque.mappingclasses.domain.User;
 
 @Repository("userDao")
 @Scope("singleton")
+@SuppressWarnings("unchecked")
 public class UserDaoImpl extends GenericDaoImpl<User, String> implements
 		UserDao {
 

@@ -109,9 +109,6 @@ public class User extends AbstractPersistentObject {
 	}
 
 	public void addMovie(final Movie movie) {
-		if (!this.movies.contains(movie)) {
-			this.movies.add(movie);
-			// movie.addOwner(this);
-		}
+		this.movies.add(movie);
 	}
 }
