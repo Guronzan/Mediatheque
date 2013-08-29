@@ -29,6 +29,8 @@ public class User extends AbstractPersistentObject {
 	private String password;
 	private Date registrationDate;
 	private Set<Movie> movies = new HashSet<>(0);
+	private Set<Book> books = new HashSet<>(0);
+	private Set<CD> cds = new HashSet<>(0);
 
 	public User(final int id, final String name, final String forName,
 			final String password, final Date registrationDate) {
@@ -110,5 +112,33 @@ public class User extends AbstractPersistentObject {
 
 	public void addMovie(final Movie movie) {
 		this.movies.add(movie);
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "book_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "BOOK_ID", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = false) })
+	public Set<Book> getBooks() {
+		return this.books;
+	}
+
+	public void setBooks(final Set<Book> books) {
+		this.books = books;
+	}
+
+	public void addBook(final Book book) {
+		this.books.add(book);
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "cd_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "CD_ID", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = false) })
+	public Set<CD> getCds() {
+		return this.cds;
+	}
+
+	public void setCds(final Set<CD> cds) {
+		this.cds = cds;
+	}
+
+	public void addCD(final CD cd) {
+		this.cds.add(cd);
 	}
 }

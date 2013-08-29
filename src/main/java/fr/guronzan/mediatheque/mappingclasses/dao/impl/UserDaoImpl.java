@@ -17,7 +17,7 @@ import fr.guronzan.mediatheque.mappingclasses.domain.User;
 @Repository("userDao")
 @Scope("singleton")
 @SuppressWarnings("unchecked")
-public class UserDaoImpl extends GenericDaoImpl<User, String> implements
+public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements
 		UserDao {
 
 	@Autowired
@@ -38,8 +38,7 @@ public class UserDaoImpl extends GenericDaoImpl<User, String> implements
 		if (list.isEmpty()) {
 			return null;
 		}
-		final User user = list.get(0);
-		return user;
+		return list.get(0);
 	}
 
 	@Override
@@ -56,7 +55,7 @@ public class UserDaoImpl extends GenericDaoImpl<User, String> implements
 		if (list.isEmpty()) {
 			return null;
 		}
-		final User user = list.get(0);
-		return user;
+		return list.get(0);
 	}
+
 }

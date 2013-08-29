@@ -9,9 +9,37 @@
 			<value>file:src/main/resources/hibernate.cfg.xml</value>
 		</property>
 	</bean>
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		>
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/mediatheque" />
+		<property name="username" value="root" />
+		<property name="password" value="" />
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 	<bean class="fr.guronzan.mediatheque.mappingclasses.dao.impl.UserDaoImpl">
 		<constructor-arg>
-				<ref bean="sessionFactory" />
+			<ref bean="sessionFactory" />
+		</constructor-arg>
+	</bean>
+	<bean class="fr.guronzan.mediatheque.mappingclasses.dao.impl.MovieDaoImpl">
+		<constructor-arg>
+			<ref bean="sessionFactory" />
+		</constructor-arg>
+	</bean>
+	<bean class="fr.guronzan.mediatheque.mappingclasses.dao.impl.CDDaoImpl">
+		<constructor-arg>
+			<ref bean="sessionFactory" />
+		</constructor-arg>
+	</bean>
+	<bean class="fr.guronzan.mediatheque.mappingclasses.dao.impl.BookDaoImpl">
+		<constructor-arg>
+			<ref bean="sessionFactory" />
 		</constructor-arg>
 	</bean>
 </beans>

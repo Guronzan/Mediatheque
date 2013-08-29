@@ -66,7 +66,7 @@ public class GenericDaoImpl<T, PK extends Serializable> extends
 				getSession().merge(o);
 			}
 		} else {
-			throw new RuntimeException(
+			throw new IllegalArgumentException(
 					"this method support only AbstractPersistentObject");
 		}
 	}
@@ -80,5 +80,4 @@ public class GenericDaoImpl<T, PK extends Serializable> extends
 	public void delete(final T o) {
 		getSession().delete(o);
 	}
-
 }

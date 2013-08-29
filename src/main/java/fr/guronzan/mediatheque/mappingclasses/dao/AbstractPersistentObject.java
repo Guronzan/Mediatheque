@@ -8,6 +8,9 @@ public abstract class AbstractPersistentObject {
 
 	private Integer version = null;
 
+	public AbstractPersistentObject() {
+	}
+
 	public String getId() {
 		return this.id;
 	}
@@ -66,8 +69,4 @@ public abstract class AbstractPersistentObject {
 		this.id = IdGenerator.createId();
 		this.version = null;
 	}
-
-	public AbstractPersistentObject() {
-	}
-
 }

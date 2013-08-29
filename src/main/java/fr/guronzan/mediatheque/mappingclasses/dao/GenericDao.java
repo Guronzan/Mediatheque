@@ -15,4 +15,5 @@ public interface GenericDao<T, PK extends Serializable> {
 	void createOrUpdate(T persistentObject);
 
 	void delete(T persistentObject);
+
 }
