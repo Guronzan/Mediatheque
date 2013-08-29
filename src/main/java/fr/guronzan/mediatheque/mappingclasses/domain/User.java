@@ -28,17 +28,24 @@ public class User extends AbstractPersistentObject {
 	private String forName;
 	private String password;
 	private Date registrationDate;
+	private byte[] avatar;
 	private Set<Movie> movies = new HashSet<>(0);
 	private Set<Book> books = new HashSet<>(0);
 	private Set<CD> cds = new HashSet<>(0);
 
-	public User(final int id, final String name, final String forName,
-			final String password, final Date registrationDate) {
-		this.userId = id;
+	public User(final int userId, final String name, final String forName,
+			final String password, final Date registrationDate,
+			final byte[] avatar, final Set<Movie> movies,
+			final Set<Book> books, final Set<CD> cds) {
+		this.userId = userId;
 		this.name = name;
 		this.forName = forName;
 		this.password = password;
 		this.registrationDate = registrationDate;
+		this.avatar = avatar;
+		this.movies = movies;
+		this.books = books;
+		this.cds = cds;
 	}
 
 	public User() {
@@ -101,7 +108,7 @@ public class User extends AbstractPersistentObject {
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "movie_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "MOVIE_ID", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = false) })
+	@JoinTable(name = "movie_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "MOVIE_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) })
 	public Set<Movie> getMovies() {
 		return this.movies;
 	}
@@ -115,7 +122,7 @@ public class User extends AbstractPersistentObject {
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "book_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "BOOK_ID", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = false) })
+	@JoinTable(name = "book_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "BOOK_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) })
 	public Set<Book> getBooks() {
 		return this.books;
 	}
@@ -129,7 +136,7 @@ public class User extends AbstractPersistentObject {
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "cd_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "CD_ID", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = false) })
+	@JoinTable(name = "cd_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "CD_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) })
 	public Set<CD> getCds() {
 		return this.cds;
 	}
@@ -140,5 +147,14 @@ public class User extends AbstractPersistentObject {
 
 	public void addCD(final CD cd) {
 		this.cds.add(cd);
+	}
+
+	@Column(name = "AVATAR", nullable = true)
+	public byte[] getAvatar() {
+		return this.avatar;
+	}
+
+	public void setAvatar(final byte[] avatar) {
+		this.avatar = avatar;
 	}
 }

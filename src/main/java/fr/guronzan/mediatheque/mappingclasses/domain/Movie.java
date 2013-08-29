@@ -28,17 +28,22 @@ public class Movie extends AbstractPersistentObject {
 	private String directorName;
 	private Date releaseDate = new Date();
 	private boolean ownedDVD = false;
-	private int season;
+	private Integer season;
 	private Set<User> owners = new HashSet<>();
+	private byte[] picture;
 
-	public Movie(final int iD, final String title, final String director,
-			final Date releaseDate, final boolean ownedDVD, final int season) {
-		this.movieId = iD;
+	public Movie(final int movieId, final String title,
+			final String directorName, final Date releaseDate,
+			final boolean ownedDVD, final int season, final Set<User> owners,
+			final byte[] picture) {
+		this.movieId = movieId;
 		this.title = title;
-		this.directorName = director;
+		this.directorName = directorName;
 		this.releaseDate = releaseDate;
 		this.ownedDVD = ownedDVD;
 		this.season = season;
+		this.owners = owners;
+		this.picture = picture;
 	}
 
 	public Movie() {
@@ -105,16 +110,16 @@ public class Movie extends AbstractPersistentObject {
 	}
 
 	@Column(name = "SEASON", nullable = true)
-	public int getSeason() {
+	public Integer getSeason() {
 		return this.season;
 	}
 
-	public void setSeason(final int season) {
+	public void setSeason(final Integer season) {
 		this.season = season;
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "movie_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "MOVIE_ID", nullable = false, updatable = false) })
+	@JoinTable(name = "movie_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "MOVIE_ID", nullable = false, updatable = true) })
 	public Set<User> getOwners() {
 		return this.owners;
 	}
@@ -125,5 +130,14 @@ public class Movie extends AbstractPersistentObject {
 
 	public void addOwner(final User user) {
 		this.owners.add(user);
+	}
+
+	@Column(name = "PICTURE", nullable = true)
+	public byte[] getPicture() {
+		return this.picture;
+	}
+
+	public void setPicture(final byte[] picture) {
+		this.picture = picture;
 	}
 }

@@ -5,6 +5,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+// @TransactionConfiguration(defaultRollback = false)
 @ContextConfiguration(locations = { "/spring.xml" })
 public class SpringTests {
 

@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
@@ -27,7 +25,6 @@ public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.MANDATORY, readOnly = true)
 	public User getUserById(final int id) {
 		final StringBuffer hql = new StringBuffer("select user from User user ");
 		hql.append(" where user.user_id=:id ");
@@ -42,7 +39,6 @@ public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.MANDATORY, readOnly = true)
 	public User getUserByFullName(final String name, final String forName) {
 		final StringBuffer hql = new StringBuffer("select user from User user ");
 		hql.append(" where user.name=:name ");
@@ -57,5 +53,4 @@ public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements
 		}
 		return list.get(0);
 	}
-
 }

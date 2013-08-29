@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+
+http://www.springframework.org/schema/tx 
+http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+
+http://www.springframework.org/schema/aop 
+http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
@@ -10,8 +19,7 @@
 		</property>
 	</bean>
 	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		>
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/mediatheque" />
 		<property name="username" value="root" />
@@ -42,4 +50,5 @@
 			<ref bean="sessionFactory" />
 		</constructor-arg>
 	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
 </beans>

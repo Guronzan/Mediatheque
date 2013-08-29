@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import fr.guronzan.mediatheque.mappingclasses.dao.CDDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.CD;
@@ -28,7 +26,6 @@ public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.MANDATORY, readOnly = true)
 	public CD getCDByID(final int id) {
 		final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
 		hql.append(" where cd.cd_id=:id ");
@@ -43,7 +40,6 @@ public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.MANDATORY, readOnly = true)
 	public CD getCdByTitle(final String title) {
 		final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
 		hql.append(" where cd.title=:title ");
@@ -58,7 +54,6 @@ public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.MANDATORY, readOnly = true)
 	public Collection<CD> getCdsByAuthor(final String name) {
 		final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
 		hql.append(" where cd.authorName=:name ");

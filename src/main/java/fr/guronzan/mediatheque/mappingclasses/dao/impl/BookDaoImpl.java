@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import fr.guronzan.mediatheque.mappingclasses.dao.BookDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.Book;
@@ -29,7 +27,6 @@ public class BookDaoImpl extends GenericDaoImpl<Book, Integer> implements
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.MANDATORY, readOnly = true)
 	public Book getBookById(final int id) {
 		final StringBuffer hql = new StringBuffer("select book from Book book ");
 		hql.append(" where book.book_id=:id ");
@@ -44,7 +41,6 @@ public class BookDaoImpl extends GenericDaoImpl<Book, Integer> implements
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.MANDATORY, readOnly = true)
 	public Book getBookByTitle(final String title) {
 		final StringBuffer hql = new StringBuffer("select book from Book book ");
 		hql.append(" where book.title=:title ");
@@ -59,7 +55,6 @@ public class BookDaoImpl extends GenericDaoImpl<Book, Integer> implements
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.MANDATORY, readOnly = true)
 	public Collection<Book> getBooksByAuthor(final String authorName) {
 		final StringBuffer hql = new StringBuffer(
 				"select movie from Movie movie ");

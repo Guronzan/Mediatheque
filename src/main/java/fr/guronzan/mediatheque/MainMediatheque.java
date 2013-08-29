@@ -6,11 +6,12 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 
 public class MainMediatheque {
 
 	private JFrame frame;
-	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+	private final JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
 	private final JPanel musicPanel = new JPanel();
 	private final JPanel moviesPanel = new JPanel();
 
@@ -19,6 +20,7 @@ public class MainMediatheque {
 	 */
 	public static void main(final String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					final MainMediatheque window = new MainMediatheque();

@@ -28,7 +28,20 @@ public class Book extends AbstractPersistentObject {
 	private String authorName;
 	private Date releaseDate = new Date();
 	private String editor;
+	private byte[] picture;
 	private Set<User> owners = new HashSet<>();
+
+	public Book(final int bookId, final String title, final String authorName,
+			final Date releaseDate, final String editor, final byte[] picture,
+			final Set<User> owners) {
+		this.bookId = bookId;
+		this.title = title;
+		this.authorName = authorName;
+		this.releaseDate = releaseDate;
+		this.editor = editor;
+		this.picture = picture;
+		this.owners = owners;
+	}
 
 	public Book() {
 		// Empty constructor
@@ -86,7 +99,7 @@ public class Book extends AbstractPersistentObject {
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "book_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "CD_ID", nullable = false, updatable = false) })
+	@JoinTable(name = "book_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "BOOK_ID", nullable = false, updatable = true) })
 	public Set<User> getOwners() {
 		return this.owners;
 	}
@@ -97,5 +110,14 @@ public class Book extends AbstractPersistentObject {
 
 	public void addOwner(final User user) {
 		this.owners.add(user);
+	}
+
+	@Column(name = "PICTURE", nullable = true)
+	public byte[] getPicture() {
+		return this.picture;
+	}
+
+	public void setPicture(final byte[] picture) {
+		this.picture = picture;
 	}
 }
