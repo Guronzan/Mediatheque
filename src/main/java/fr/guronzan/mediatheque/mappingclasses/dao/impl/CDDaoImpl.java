@@ -2,7 +2,6 @@ package fr.guronzan.mediatheque.mappingclasses.dao.impl;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -32,11 +31,7 @@ public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
 		final Query query = getSession().createQuery(hql.toString());
 
 		query.setInteger("id", id);
-		final List<CD> list = query.list();
-		if (list.isEmpty()) {
-			return null;
-		}
-		return list.get(0);
+		return (CD) query.uniqueResult();
 	}
 
 	@Override
@@ -46,11 +41,7 @@ public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
 		final Query query = getSession().createQuery(hql.toString());
 
 		query.setString("title", title);
-		final List<CD> list = query.list();
-		if (list.isEmpty()) {
-			return null;
-		}
-		return list.get(0);
+		return (CD) query.list();
 	}
 
 	@Override

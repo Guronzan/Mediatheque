@@ -1,5 +1,7 @@
 package fr.guronzan.mediatheque.webservice;
 
+import java.util.Collection;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -43,6 +45,14 @@ public class DBAccess {
 
 	public User getUserFromFullName(final String name, final String forName) {
 		return this.userDao.getUserByFullName(name, forName);
+	}
+
+	public User getUserFromNickName(final String nickName) {
+		return this.userDao.getUserByNickName(nickName);
+	}
+
+	public Collection<User> getAllUsers() {
+		return this.userDao.getUsers();
 	}
 
 	public boolean checkPasswordFromID(final int userId, final String password) {

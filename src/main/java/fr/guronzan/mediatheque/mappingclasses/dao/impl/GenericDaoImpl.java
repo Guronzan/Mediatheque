@@ -8,12 +8,12 @@ import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.guronzan.mediatheque.mappingclasses.dao.AbstractPersistentObject;
 import fr.guronzan.mediatheque.mappingclasses.dao.GenericDao;
 
+@Transactional
 public class GenericDaoImpl<T, PK extends Serializable> extends
 		HibernateDaoSupport implements GenericDao<T, PK> {
 
@@ -33,7 +33,6 @@ public class GenericDaoImpl<T, PK extends Serializable> extends
 
 	@Override
 	@SuppressWarnings("unchecked")
-	@Transactional(propagation = Propagation.REQUIRED)
 	public T get(final PK id) {
 		T value = (T) getSession().get(this.type, id);
 		if (value == null) {
@@ -50,7 +49,6 @@ public class GenericDaoImpl<T, PK extends Serializable> extends
 
 	@Override
 	@SuppressWarnings("unchecked")
-	@Transactional(propagation = Propagation.REQUIRED)
 	public List<T> getAll() {
 		final Criteria crit = getSession().createCriteria(this.type);
 		return crit.list();

@@ -34,11 +34,7 @@ public class MovieDaoImpl extends GenericDaoImpl<Movie, Integer> implements
 		final Query query = getSession().createQuery(hql.toString());
 
 		query.setInteger("id", id);
-		final List<Movie> list = query.list();
-		if (list.isEmpty()) {
-			return null;
-		}
-		return list.get(0);
+		return (Movie) query.uniqueResult();
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package fr.guronzan.mediatheque.mappingclasses.dao.impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -39,6 +40,11 @@ public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements
 	}
 
 	@Override
+	public Collection<User> getUsers() {
+		return getAll();
+	}
+
+	@Override
 	public User getUserByFullName(final String name, final String forName) {
 		final StringBuffer hql = new StringBuffer("select user from User user ");
 		hql.append(" where user.name=:name ");
@@ -47,10 +53,40 @@ public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements
 
 		query.setString("name", name);
 		query.setString("forName", forName);
-		final List<User> list = query.list();
-		if (list.isEmpty()) {
+		return (User) query.uniqueResult();
+	}
+
+	@Override
+	public User getUserByNickName(final String nickName) {
+		final StringBuffer hql = new StringBuffer("select user from User user ");
+		hql.append(" where user.nickName=:nickName ");
+		final Query query = getSession().createQuery(hql.toString());
+
+		query.setString("nickName", nickName);
+		return (User) query.uniqueResult();
+	}
+
+	@Override
+	public User checkPassword(final String nickName,
+			final String encryptedPassword) {
+		final User userByNickName = getUserByNickName(nickName);
+		if (userByNickName == null) {
 			return null;
 		}
-		return list.get(0);
+		if (userByNickName.checkPassword(encryptedPassword)) {
+			return userByNickName;
+		}
+		return null;
 	}
+
+	@Override
+	public boolean containsUser(final String nickName) {
+		return getUserByNickName(nickName) != null;
+	}
+
+	@Override
+	public void populateBooks(final User userByNickName) {
+		userByNickName.getBooks();
+	}
+
 }

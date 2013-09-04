@@ -1,8 +1,8 @@
 package fr.guronzan.mediatheque.mappingclasses.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -29,12 +27,12 @@ public class Movie extends AbstractPersistentObject {
 	private Date releaseDate = new Date();
 	private boolean ownedDVD = false;
 	private Integer season;
-	private Set<User> owners = new HashSet<>();
+	private List<User> owners = new ArrayList<>();
 	private byte[] picture;
 
 	public Movie(final int movieId, final String title,
 			final String directorName, final Date releaseDate,
-			final boolean ownedDVD, final int season, final Set<User> owners,
+			final boolean ownedDVD, final int season, final List<User> owners,
 			final byte[] picture) {
 		this.movieId = movieId;
 		this.title = title;
@@ -118,13 +116,16 @@ public class Movie extends AbstractPersistentObject {
 		this.season = season;
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "movie_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "MOVIE_ID", nullable = false, updatable = true) })
-	public Set<User> getOwners() {
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "movies")
+	// @JoinTable(name = "movie_user", catalog = "mediatheque", joinColumns = {
+	// @JoinColumn(name = "USER_ID", nullable = false, updatable = true) },
+	// inverseJoinColumns = { @JoinColumn(name = "MOVIE_ID", nullable = false,
+	// updatable = true) })
+	public List<User> getOwners() {
 		return this.owners;
 	}
 
-	public void setOwners(final Set<User> owners) {
+	public void setOwners(final List<User> owners) {
 		this.owners = owners;
 	}
 

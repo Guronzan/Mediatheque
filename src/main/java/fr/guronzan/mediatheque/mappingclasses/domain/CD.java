@@ -1,8 +1,8 @@
 package fr.guronzan.mediatheque.mappingclasses.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -29,11 +27,11 @@ public class CD extends AbstractPersistentObject {
 	private Date releaseDate = new Date();
 	private CDKindType kind;
 	private byte[] picture;
-	private Set<User> owners = new HashSet<>();
+	private List<User> owners = new ArrayList<>();
 
 	public CD(final int cdId, final String title, final String authorName,
 			final Date releaseDate, final CDKindType kind,
-			final byte[] picture, final Set<User> owners) {
+			final byte[] picture, final List<User> owners) {
 		this.cdId = cdId;
 		this.title = title;
 		this.authorName = authorName;
@@ -98,13 +96,16 @@ public class CD extends AbstractPersistentObject {
 		this.kind = kind;
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "cd_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "CD_ID", nullable = false, updatable = true) })
-	public Set<User> getOwners() {
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cds")
+	// @JoinTable(name = "cd_user", catalog = "mediatheque", joinColumns = {
+	// @JoinColumn(name = "USER_ID", nullable = false, updatable = true) },
+	// inverseJoinColumns = { @JoinColumn(name = "CD_ID", nullable = false,
+	// updatable = true) })
+	public List<User> getOwners() {
 		return this.owners;
 	}
 
-	public void setOwners(final Set<User> owners) {
+	public void setOwners(final List<User> owners) {
 		this.owners = owners;
 	}
 

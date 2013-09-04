@@ -2,7 +2,6 @@ package fr.guronzan.mediatheque.mappingclasses.dao.impl;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -33,11 +32,7 @@ public class BookDaoImpl extends GenericDaoImpl<Book, Integer> implements
 		final Query query = getSession().createQuery(hql.toString());
 
 		query.setInteger("id", id);
-		final List<Book> list = query.list();
-		if (list.isEmpty()) {
-			return null;
-		}
-		return list.get(0);
+		return (Book) query.uniqueResult();
 	}
 
 	@Override
@@ -47,11 +42,7 @@ public class BookDaoImpl extends GenericDaoImpl<Book, Integer> implements
 		final Query query = getSession().createQuery(hql.toString());
 
 		query.setString("title", title);
-		final List<Book> list = query.list();
-		if (list.isEmpty()) {
-			return null;
-		}
-		return list.get(0);
+		return (Book) query.uniqueResult();
 	}
 
 	@Override

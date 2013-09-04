@@ -1,10 +1,22 @@
 package fr.guronzan.mediatheque.mappingclasses.dao;
 
+import java.util.Collection;
+
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
 
 public interface UserDao extends GenericDao<User, Integer> {
-	public User getUserById(int id);
+	User getUserById(int id);
 
-	public User getUserByFullName(String name, String forName);
+	User getUserByFullName(String name, String forName);
+
+	Collection<User> getUsers();
+
+	User getUserByNickName(String nickName);
+
+	User checkPassword(String nickName, String encryptedPassword);
+
+	boolean containsUser(String nickName);
+
+	void populateBooks(User userByNickName);
 
 }

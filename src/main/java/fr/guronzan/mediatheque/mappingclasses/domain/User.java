@@ -1,8 +1,8 @@
 package fr.guronzan.mediatheque.mappingclasses.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +16,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.IndexColumn;
+import org.springframework.util.DigestUtils;
+
 import fr.guronzan.mediatheque.mappingclasses.dao.AbstractPersistentObject;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -27,20 +30,21 @@ public class User extends AbstractPersistentObject {
 	private String name;
 	private String forName;
 	private String password;
+	private String nickName;
 	private Date registrationDate;
 	private byte[] avatar;
-	private Set<Movie> movies = new HashSet<>(0);
-	private Set<Book> books = new HashSet<>(0);
-	private Set<CD> cds = new HashSet<>(0);
+	private List<Movie> movies = new ArrayList<>(0);
+	private List<Book> books = new ArrayList<>(0);
+	private List<CD> cds = new ArrayList<>(0);
 
 	public User(final int userId, final String name, final String forName,
 			final String password, final Date registrationDate,
-			final byte[] avatar, final Set<Movie> movies,
-			final Set<Book> books, final Set<CD> cds) {
+			final byte[] avatar, final List<Movie> movies,
+			final List<Book> books, final List<CD> cds) {
 		this.userId = userId;
 		this.name = name;
 		this.forName = forName;
-		this.password = password;
+		setPassword(password);
 		this.registrationDate = registrationDate;
 		this.avatar = avatar;
 		this.movies = movies;
@@ -52,11 +56,12 @@ public class User extends AbstractPersistentObject {
 		// Empty constructor
 	}
 
-	public User(final String name, final String forName, final String password,
-			final Date registrationDate) {
+	public User(final String name, final String forName, final String nickName,
+			final String password, final Date registrationDate) {
 		this.name = name;
 		this.forName = forName;
-		this.password = password;
+		this.nickName = nickName;
+		setPassword(password);
 		this.registrationDate = registrationDate;
 	}
 
@@ -80,6 +85,15 @@ public class User extends AbstractPersistentObject {
 		this.name = name;
 	}
 
+	@Column(name = "NICK_NAME", nullable = false, length = 20, unique = true)
+	public String getNickName() {
+		return this.nickName;
+	}
+
+	public void setNickName(final String nickName) {
+		this.nickName = nickName;
+	}
+
 	@Column(name = "FORNAME", nullable = false, length = 20)
 	public String getForName() {
 		return this.forName;
@@ -89,13 +103,13 @@ public class User extends AbstractPersistentObject {
 		this.forName = forName;
 	}
 
-	@Column(name = "PASSWORD", nullable = false, length = 30)
+	@Column(name = "PASSWORD", nullable = false, length = 80)
 	public String getPassword() {
 		return this.password;
 	}
 
 	public void setPassword(final String password) {
-		this.password = password;
+		this.password = DigestUtils.md5DigestAsHex(password.getBytes());
 	}
 
 	@Column(name = "REGISTRATION_DATE", nullable = false, length = 10)
@@ -107,13 +121,14 @@ public class User extends AbstractPersistentObject {
 		this.registrationDate = registrationDate;
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "movie_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "MOVIE_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) })
-	public Set<Movie> getMovies() {
+	@IndexColumn(name = "MOVIE_COL")
+	public List<Movie> getMovies() {
 		return this.movies;
 	}
 
-	public void setMovies(final Set<Movie> movies) {
+	public void setMovies(final List<Movie> movies) {
 		this.movies = movies;
 	}
 
@@ -121,13 +136,14 @@ public class User extends AbstractPersistentObject {
 		this.movies.add(movie);
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "book_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "BOOK_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) })
-	public Set<Book> getBooks() {
+	@IndexColumn(name = "BOOK_COL")
+	public List<Book> getBooks() {
 		return this.books;
 	}
 
-	public void setBooks(final Set<Book> books) {
+	public void setBooks(final List<Book> books) {
 		this.books = books;
 	}
 
@@ -135,13 +151,14 @@ public class User extends AbstractPersistentObject {
 		this.books.add(book);
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "cd_user", catalog = "mediatheque", joinColumns = { @JoinColumn(name = "CD_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) })
-	public Set<CD> getCds() {
+	@IndexColumn(name = "CD_COL")
+	public List<CD> getCds() {
 		return this.cds;
 	}
 
-	public void setCds(final Set<CD> cds) {
+	public void setCds(final List<CD> cds) {
 		this.cds = cds;
 	}
 
@@ -156,5 +173,9 @@ public class User extends AbstractPersistentObject {
 
 	public void setAvatar(final byte[] avatar) {
 		this.avatar = avatar;
+	}
+
+	public boolean checkPassword(final String password) {
+		return this.password.equals(password);
 	}
 }
