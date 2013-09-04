@@ -1,6 +1,7 @@
 package fr.guronzan.mediatheque.mappingclasses.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,6 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.IndexColumn;
 
-import fr.guronzan.mediatheque.mappingclasses.dao.AbstractPersistentObject;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -36,21 +36,12 @@ public class User extends AbstractPersistentObject {
 	private List<Book> books = new ArrayList<>(0);
 	private List<CD> cds = new ArrayList<>(0);
 
-	public User(final int userId, final String name, final String forName,
-			final String password, final Date registrationDate,
-			final byte[] avatar, final List<Movie> movies,
-			final List<Book> books, final List<CD> cds) {
-		this.userId = userId;
-		this.name = name;
-		this.forName = forName;
-		this.password = password;
-		this.registrationDate = registrationDate;
-		this.avatar = avatar;
-		this.movies = movies;
-		this.books = books;
-		this.cds = cds;
-	}
-
+	/**
+	 * 
+	 * Le hash du password est réalisé par l'appellant explicitement, au moment
+	 * de la construction de l'objet User, afin que Hibernate ne réalise pas un
+	 * hash a chaque fois que l'on appelle l'objet à partir de la base
+	 */
 	public User() {
 		// Empty constructor
 	}
@@ -171,7 +162,7 @@ public class User extends AbstractPersistentObject {
 	}
 
 	public void setAvatar(final byte[] avatar) {
-		this.avatar = avatar;
+		this.avatar = Arrays.copyOf(avatar, avatar.length);
 	}
 
 	public boolean checkPassword(final String password) {

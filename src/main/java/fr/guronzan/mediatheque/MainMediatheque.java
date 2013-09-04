@@ -8,8 +8,12 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
-public class MainMediatheque {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class MainMediatheque {
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(MainMediatheque.class);
 	private JFrame frmMediatheque;
 	private final JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
 	private final JPanel musicPanel = new JPanel();
@@ -26,7 +30,9 @@ public class MainMediatheque {
 					final MainMediatheque window = new MainMediatheque();
 					window.frmMediatheque.setVisible(true);
 				} catch (final Exception e) {
-					e.printStackTrace();
+					LOGGER.error(
+							"Erreur durant l'exécution de la fenêtre principale de l'application.",
+							e);
 				}
 			}
 		});

@@ -6,10 +6,10 @@ import fr.guronzan.mediatheque.mappingclasses.domain.Book;
 
 public interface BookDao extends GenericDao<Book, Integer> {
 
-	public Book getBookById(int id);
+	Book getBookById(int id);
 
-	public Book getBookByTitle(String name);
+	Book getBookByTitle(String name);
 
-	public Collection<Book> getBooksByAuthor(String name);
+	Collection<Book> getBooksByAuthor(String name);
 
 }

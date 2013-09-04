@@ -1,8 +1,11 @@
-package fr.guronzan.mediatheque.mappingclasses.dao;
+package fr.guronzan.mediatheque.mappingclasses.domain;
 
 import java.util.UUID;
 
-public class IdGenerator {
+public final class IdGenerator {
+	private IdGenerator() {
+		// no instantiation
+	}
 
 	public static String createId() {
 		final UUID uuid = java.util.UUID.randomUUID();

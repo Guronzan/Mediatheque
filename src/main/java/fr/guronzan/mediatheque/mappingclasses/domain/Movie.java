@@ -1,6 +1,7 @@
 package fr.guronzan.mediatheque.mappingclasses.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import fr.guronzan.mediatheque.mappingclasses.dao.AbstractPersistentObject;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -29,20 +29,6 @@ public class Movie extends AbstractPersistentObject {
 	private Integer season;
 	private List<User> owners = new ArrayList<>();
 	private byte[] picture;
-
-	public Movie(final int movieId, final String title,
-			final String directorName, final Date releaseDate,
-			final boolean ownedDVD, final int season, final List<User> owners,
-			final byte[] picture) {
-		this.movieId = movieId;
-		this.title = title;
-		this.directorName = directorName;
-		this.releaseDate = releaseDate;
-		this.ownedDVD = ownedDVD;
-		this.season = season;
-		this.owners = owners;
-		this.picture = picture;
-	}
 
 	public Movie() {
 		// Empty constructor
@@ -117,10 +103,6 @@ public class Movie extends AbstractPersistentObject {
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "movies")
-	// @JoinTable(name = "movie_user", catalog = "mediatheque", joinColumns = {
-	// @JoinColumn(name = "USER_ID", nullable = false, updatable = true) },
-	// inverseJoinColumns = { @JoinColumn(name = "MOVIE_ID", nullable = false,
-	// updatable = true) })
 	public List<User> getOwners() {
 		return this.owners;
 	}
@@ -139,6 +121,6 @@ public class Movie extends AbstractPersistentObject {
 	}
 
 	public void setPicture(final byte[] picture) {
-		this.picture = picture;
+		this.picture = Arrays.copyOf(picture, picture.length);
 	}
 }

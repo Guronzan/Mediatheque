@@ -3,10 +3,10 @@ package fr.guronzan.mediatheque.mappingclasses.dao;
 import java.io.Serializable;
 import java.util.List;
 
-public interface GenericDao<T, PK extends Serializable> {
-	PK create(T persistentObject);
+public interface GenericDao<T, K extends Serializable> {
+	K create(T persistentObject);
 
-	T get(PK id);
+	T get(K id);
 
 	List<T> getAll();
 

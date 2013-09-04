@@ -1,6 +1,7 @@
 package fr.guronzan.mediatheque.mappingclasses.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import fr.guronzan.mediatheque.mappingclasses.dao.AbstractPersistentObject;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -28,18 +28,6 @@ public class Book extends AbstractPersistentObject {
 	private String editor;
 	private byte[] picture;
 	private List<User> owners = new ArrayList<>();
-
-	public Book(final int bookId, final String title, final String authorName,
-			final Date releaseDate, final String editor, final byte[] picture,
-			final List<User> owners) {
-		this.bookId = bookId;
-		this.title = title;
-		this.authorName = authorName;
-		this.releaseDate = releaseDate;
-		this.editor = editor;
-		this.picture = picture;
-		this.owners = owners;
-	}
 
 	public Book() {
 		// Empty constructor
@@ -97,10 +85,6 @@ public class Book extends AbstractPersistentObject {
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "books")
-	// @JoinTable(name = "book_user", catalog = "mediatheque", joinColumns = {
-	// @JoinColumn(name = "USER_ID", nullable = false, updatable = true) },
-	// inverseJoinColumns = { @JoinColumn(name = "BOOK_ID", nullable = false,
-	// updatable = true) })
 	public List<User> getOwners() {
 		return this.owners;
 	}
@@ -119,6 +103,6 @@ public class Book extends AbstractPersistentObject {
 	}
 
 	public void setPicture(final byte[] picture) {
-		this.picture = picture;
+		this.picture = Arrays.copyOf(picture, picture.length);
 	}
 }

@@ -1,4 +1,6 @@
-package fr.guronzan.mediatheque.mappingclasses.dao;
+package fr.guronzan.mediatheque.mappingclasses.domain;
+
+
 
 /**
  * AbstractPersistentObject
@@ -32,7 +34,7 @@ public abstract class AbstractPersistentObject {
 		if (this == o) {
 			return true;
 		}
-		if (o == null || !(o instanceof AbstractPersistentObject)) {
+		if (!(o instanceof AbstractPersistentObject)) {
 			return false;
 		}
 

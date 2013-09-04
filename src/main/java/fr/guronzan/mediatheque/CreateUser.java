@@ -34,9 +34,6 @@ public class CreateUser {
 	private JTextField forNameField;
 	private JTextField nickField;
 	private JPasswordField passwordField;
-	private JButton btnCreer;
-	private JButton btnQuitter;
-	private User user;
 
 	/**
 	 * Launch the application.
@@ -150,30 +147,30 @@ public class CreateUser {
 		gbcPasswordField.gridy = 4;
 		this.frame.getContentPane().add(this.passwordField, gbcPasswordField);
 
-		this.btnCreer = new JButton("Cr\u00E9er");
+		final JButton btnCreer = new JButton("Cr\u00E9er");
 		final GridBagConstraints gbcBtnCreer = new GridBagConstraints();
 		gbcBtnCreer.insets = new Insets(0, 0, 0, 5);
 		gbcBtnCreer.gridx = 0;
 		gbcBtnCreer.gridy = 7;
-		this.btnCreer.addActionListener(new ActionListener() {
+		btnCreer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				createUser();
 			}
 		});
-		this.frame.getContentPane().add(this.btnCreer, gbcBtnCreer);
+		this.frame.getContentPane().add(btnCreer, gbcBtnCreer);
 
-		this.btnQuitter = new JButton("Quitter");
+		final JButton btnQuitter = new JButton("Quitter");
 		final GridBagConstraints gbcBtnQuitter = new GridBagConstraints();
 		gbcBtnQuitter.gridx = 1;
 		gbcBtnQuitter.gridy = 7;
-		this.btnQuitter.addActionListener(new ActionListener() {
+		btnQuitter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		this.frame.getContentPane().add(this.btnQuitter, gbcBtnQuitter);
+		this.frame.getContentPane().add(btnQuitter, gbcBtnQuitter);
 	}
 
 	private void createUser() {
@@ -185,11 +182,11 @@ public class CreateUser {
 					"Erreur création compte", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		this.user = new User(this.nameField.getText(),
+		final User user = new User(this.nameField.getText(),
 				this.forNameField.getText(), this.nickField.getText(),
 				DigestUtils.md5DigestAsHex(String.valueOf(
 						this.passwordField.getPassword()).getBytes()),
 				new Date());
-		USER_DAO.createOrUpdate(this.user);
+		USER_DAO.createOrUpdate(user);
 	}
 }

@@ -10,12 +10,19 @@ import org.hibernate.proxy.HibernateProxy;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.guronzan.mediatheque.mappingclasses.dao.AbstractPersistentObject;
 import fr.guronzan.mediatheque.mappingclasses.dao.GenericDao;
+import fr.guronzan.mediatheque.mappingclasses.domain.AbstractPersistentObject;
 
 @Transactional
-public class GenericDaoImpl<T, PK extends Serializable> extends
-		HibernateDaoSupport implements GenericDao<T, PK> {
+/**
+ * 
+ * @author rodriguesgu
+ *
+ * @param <T>
+ * @param <K> K : PrimaryKey
+ */
+public class GenericDaoImpl<T, K extends Serializable> extends
+		HibernateDaoSupport implements GenericDao<T, K> {
 
 	private final Class<T> type;
 
@@ -27,13 +34,13 @@ public class GenericDaoImpl<T, PK extends Serializable> extends
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public PK create(final T o) {
-		return (PK) getSession().save(o);
+	public K create(final T o) {
+		return (K) getSession().save(o);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public T get(final PK id) {
+	public T get(final K id) {
 		T value = (T) getSession().get(this.type, id);
 		if (value == null) {
 			return null;

@@ -3,10 +3,10 @@ package fr.guronzan.mediatheque;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class MediathequeApplicationContext {
-	public static ApplicationContext context = null;
+public final class MediathequeApplicationContext {
+	private static ApplicationContext context = null;
 
-	public MediathequeApplicationContext() {
+	private MediathequeApplicationContext() {
 		context = new ClassPathXmlApplicationContext("spring.xml");
 	}
 
