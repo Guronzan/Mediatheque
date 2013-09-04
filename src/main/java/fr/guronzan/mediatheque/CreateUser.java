@@ -18,6 +18,7 @@ import javax.swing.WindowConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.DigestUtils;
 
 import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
@@ -186,7 +187,9 @@ public class CreateUser {
 		}
 		this.user = new User(this.nameField.getText(),
 				this.forNameField.getText(), this.nickField.getText(),
-				String.valueOf(this.passwordField.getPassword()), new Date());
+				DigestUtils.md5DigestAsHex(String.valueOf(
+						this.passwordField.getPassword()).getBytes()),
+				new Date());
 		USER_DAO.createOrUpdate(this.user);
 	}
 }

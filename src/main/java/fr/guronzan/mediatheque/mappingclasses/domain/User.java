@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.IndexColumn;
-import org.springframework.util.DigestUtils;
 
 import fr.guronzan.mediatheque.mappingclasses.dao.AbstractPersistentObject;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -44,7 +43,7 @@ public class User extends AbstractPersistentObject {
 		this.userId = userId;
 		this.name = name;
 		this.forName = forName;
-		setPassword(password);
+		this.password = password;
 		this.registrationDate = registrationDate;
 		this.avatar = avatar;
 		this.movies = movies;
@@ -61,7 +60,7 @@ public class User extends AbstractPersistentObject {
 		this.name = name;
 		this.forName = forName;
 		this.nickName = nickName;
-		setPassword(password);
+		this.password = password;
 		this.registrationDate = registrationDate;
 	}
 
@@ -109,7 +108,7 @@ public class User extends AbstractPersistentObject {
 	}
 
 	public void setPassword(final String password) {
-		this.password = DigestUtils.md5DigestAsHex(password.getBytes());
+		this.password = password;
 	}
 
 	@Column(name = "REGISTRATION_DATE", nullable = false, length = 10)
