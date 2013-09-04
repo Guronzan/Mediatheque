@@ -21,88 +21,88 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "book", catalog = "mediatheque", uniqueConstraints = { @UniqueConstraint(columnNames = "BOOK_ID") })
 public class Book extends AbstractPersistentObject {
 
-	private int bookId;
-	private String title;
-	private String authorName;
-	private Date releaseDate = new Date();
-	private String editor;
-	private byte[] picture;
-	private List<User> owners = new ArrayList<>();
+    private int bookId;
+    private String title;
+    private String authorName;
+    private Date releaseDate = new Date();
+    private String editor;
+    private byte[] picture;
+    private List<User> owners = new ArrayList<>();
 
-	public Book() {
-		// Empty constructor
-	}
+    public Book() {
+        // Empty constructor
+    }
 
-	public Book(final String title) {
-		this.title = title;
-	}
+    public Book(final String title) {
+        this.title = title;
+    }
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "BOOK_ID", unique = true, nullable = false)
-	public int getBookId() {
-		return this.bookId;
-	}
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "BOOK_ID", unique = true, nullable = false)
+    public int getBookId() {
+        return this.bookId;
+    }
 
-	public void setBookId(final int bookId) {
-		this.bookId = bookId;
-	}
+    public void setBookId(final int bookId) {
+        this.bookId = bookId;
+    }
 
-	@Column(name = "TITLE", unique = true, nullable = false, length = 40)
-	public String getTitle() {
-		return this.title;
-	}
+    @Column(name = "TITLE", unique = true, nullable = false, length = 40)
+    public String getTitle() {
+        return this.title;
+    }
 
-	public void setTitle(final String title) {
-		this.title = title;
-	}
+    public void setTitle(final String title) {
+        this.title = title;
+    }
 
-	@Column(name = "AUTHOR_NAME", unique = true, nullable = true, length = 30)
-	public String getAuthorName() {
-		return this.authorName;
-	}
+    @Column(name = "AUTHOR_NAME", unique = true, nullable = true, length = 30)
+    public String getAuthorName() {
+        return this.authorName;
+    }
 
-	public void setAuthorName(final String authorName) {
-		this.authorName = authorName;
-	}
+    public void setAuthorName(final String authorName) {
+        this.authorName = authorName;
+    }
 
-	@Column(name = "RELEASE_DATE", nullable = false, length = 20)
-	public Date getReleaseDate() {
-		return this.releaseDate;
-	}
+    @Column(name = "RELEASE_DATE", nullable = false, length = 20)
+    public Date getReleaseDate() {
+        return this.releaseDate;
+    }
 
-	public void setReleaseDate(final Date releaseDate) {
-		this.releaseDate = releaseDate;
-	}
+    public void setReleaseDate(final Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
-	@Column(name = "EDITOR", nullable = false, length = 20)
-	public String getEditor() {
-		return this.editor;
-	}
+    @Column(name = "EDITOR", nullable = false, length = 20)
+    public String getEditor() {
+        return this.editor;
+    }
 
-	public void setEditor(final String editor) {
-		this.editor = editor;
-	}
+    public void setEditor(final String editor) {
+        this.editor = editor;
+    }
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "books")
-	public List<User> getOwners() {
-		return this.owners;
-	}
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "books")
+    public List<User> getOwners() {
+        return this.owners;
+    }
 
-	public void setOwners(final List<User> owners) {
-		this.owners = owners;
-	}
+    public void setOwners(final List<User> owners) {
+        this.owners = owners;
+    }
 
-	public void addOwner(final User user) {
-		this.owners.add(user);
-	}
+    public void addOwner(final User user) {
+        this.owners.add(user);
+    }
 
-	@Column(name = "PICTURE", nullable = true)
-	public byte[] getPicture() {
-		return this.picture;
-	}
+    @Column(name = "PICTURE", nullable = true)
+    public byte[] getPicture() {
+        return this.picture;
+    }
 
-	public void setPicture(final byte[] picture) {
-		this.picture = Arrays.copyOf(picture, picture.length);
-	}
+    public void setPicture(final byte[] picture) {
+        this.picture = Arrays.copyOf(picture, picture.length);
+    }
 }

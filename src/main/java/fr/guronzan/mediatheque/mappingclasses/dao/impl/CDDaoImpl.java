@@ -18,43 +18,43 @@ import fr.guronzan.mediatheque.mappingclasses.domain.CD;
 @SuppressWarnings("unchecked")
 public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
 
-	@Autowired
-	public CDDaoImpl(
-			@Qualifier("sessionFactory") final SessionFactory sessionFactory) {
-		super(sessionFactory, CD.class);
-	}
+    @Autowired
+    public CDDaoImpl(
+            @Qualifier("sessionFactory") final SessionFactory sessionFactory) {
+        super(sessionFactory, CD.class);
+    }
 
-	@Override
-	public CD getCDByID(final int id) {
-		final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
-		hql.append(" where cd.cd_id=:id ");
-		final Query query = getSession().createQuery(hql.toString());
+    @Override
+    public CD getCDByID(final int id) {
+        final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
+        hql.append(" where cd.cd_id=:id ");
+        final Query query = getSession().createQuery(hql.toString());
 
-		query.setInteger("id", id);
-		return (CD) query.uniqueResult();
-	}
+        query.setInteger("id", id);
+        return (CD) query.uniqueResult();
+    }
 
-	@Override
-	public CD getCdByTitle(final String title) {
-		final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
-		hql.append(" where cd.title=:title ");
-		final Query query = getSession().createQuery(hql.toString());
+    @Override
+    public CD getCdByTitle(final String title) {
+        final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
+        hql.append(" where cd.title=:title ");
+        final Query query = getSession().createQuery(hql.toString());
 
-		query.setString("title", title);
-		return (CD) query.list();
-	}
+        query.setString("title", title);
+        return (CD) query.list();
+    }
 
-	@Override
-	public Collection<CD> getCdsByAuthor(final String name) {
-		final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
-		hql.append(" where cd.authorName=:name ");
-		final Query query = getSession().createQuery(hql.toString());
+    @Override
+    public Collection<CD> getCdsByAuthor(final String name) {
+        final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
+        hql.append(" where cd.authorName=:name ");
+        final Query query = getSession().createQuery(hql.toString());
 
-		query.setString("name", name);
-		final Collection<CD> list = query.list();
-		if (list.isEmpty()) {
-			return new LinkedList<>();
-		}
-		return list;
-	}
+        query.setString("name", name);
+        final Collection<CD> list = query.list();
+        if (list.isEmpty()) {
+            return new LinkedList<>();
+        }
+        return list;
+    }
 }

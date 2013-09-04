@@ -12,58 +12,58 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MainMediatheque {
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(MainMediatheque.class);
-	private JFrame frmMediatheque;
-	private final JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
-	private final JPanel musicPanel = new JPanel();
-	private final JPanel moviesPanel = new JPanel();
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(MainMediatheque.class);
+    private JFrame frmMediatheque;
+    private final JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
+    private final JPanel musicPanel = new JPanel();
+    private final JPanel moviesPanel = new JPanel();
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(final String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					final MainMediatheque window = new MainMediatheque();
-					window.frmMediatheque.setVisible(true);
-				} catch (final Exception e) {
-					LOGGER.error(
-							"Erreur durant l'exécution de la fenêtre principale de l'application.",
-							e);
-				}
-			}
-		});
-	}
+    /**
+     * Launch the application.
+     */
+    public static void main(final String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final MainMediatheque window = new MainMediatheque();
+                    window.frmMediatheque.setVisible(true);
+                } catch (final Exception e) {
+                    LOGGER.error(
+                            "Erreur durant l'exécution de la fenêtre principale de l'application.",
+                            e);
+                }
+            }
+        });
+    }
 
-	/**
-	 * Create the application.
-	 */
-	public MainMediatheque() {
-		initialize();
-	}
+    /**
+     * Create the application.
+     */
+    public MainMediatheque() {
+        initialize();
+    }
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		this.frmMediatheque = new JFrame();
-		this.frmMediatheque.setTitle("mediatheque");
-		this.frmMediatheque.setBounds(100, 100, 1073, 580);
-		this.frmMediatheque.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    /**
+     * Initialize the contents of the frame.
+     */
+    private void initialize() {
+        this.frmMediatheque = new JFrame();
+        this.frmMediatheque.setTitle("mediatheque");
+        this.frmMediatheque.setBounds(100, 100, 1073, 580);
+        this.frmMediatheque.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		this.frmMediatheque.getContentPane().add(this.tabbedPane,
-				BorderLayout.NORTH);
+        this.frmMediatheque.getContentPane().add(this.tabbedPane,
+                BorderLayout.NORTH);
 
-		this.tabbedPane.addTab("Musique", null, this.musicPanel, null);
-		this.tabbedPane.setEnabledAt(0, true);
+        this.tabbedPane.addTab("Musique", null, this.musicPanel, null);
+        this.tabbedPane.setEnabledAt(0, true);
 
-		this.tabbedPane.addTab("Vid\u00E9os", null, this.moviesPanel, null);
-	}
+        this.tabbedPane.addTab("Vid\u00E9os", null, this.moviesPanel, null);
+    }
 
-	public JFrame getFrame() {
-		return this.frmMediatheque;
-	}
+    public JFrame getFrame() {
+        return this.frmMediatheque;
+    }
 }
