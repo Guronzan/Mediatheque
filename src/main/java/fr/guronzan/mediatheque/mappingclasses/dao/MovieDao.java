@@ -10,9 +10,7 @@ import fr.guronzan.mediatheque.mappingclasses.domain.Movie;
 @Transactional(propagation = Propagation.MANDATORY)
 public interface MovieDao extends GenericDao<Movie, Integer> {
 
-    Movie getMovieById(int id);
-
-    Collection<Movie> getMoviesByDirector(String directorName);
+    Collection<Movie> getMoviesByDirector(final String directorName);
 
     Movie getMovieByTitle(final String title);
 

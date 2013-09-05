@@ -2,6 +2,7 @@ package fr.guronzan.mediatheque.mappingclasses.dao.impl;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -25,28 +26,18 @@ public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
     }
 
     @Override
-    public CD getCDByID(final int id) {
-        final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
-        hql.append(" where cd.cd_id=:id ");
-        final Query query = getSession().createQuery(hql.toString());
-
-        query.setInteger("id", id);
-        return (CD) query.uniqueResult();
-    }
-
-    @Override
     public CD getCdByTitle(final String title) {
-        final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
+        final StringBuffer hql = new StringBuffer("select cd from CD cd ");
         hql.append(" where cd.title=:title ");
         final Query query = getSession().createQuery(hql.toString());
 
         query.setString("title", title);
-        return (CD) query.list();
+        return (CD) query.uniqueResult();
     }
 
     @Override
     public Collection<CD> getCdsByAuthor(final String name) {
-        final StringBuffer hql = new StringBuffer("select cd from Cd cd ");
+        final StringBuffer hql = new StringBuffer("select cd from CD cd ");
         hql.append(" where cd.authorName=:name ");
         final Query query = getSession().createQuery(hql.toString());
 
@@ -56,5 +47,18 @@ public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
             return new LinkedList<>();
         }
         return list;
+    }
+
+    @Override
+    public void removeAllCDs() {
+        final List<CD> allCDs = getAll();
+        for (final CD cd : allCDs) {
+            delete(cd);
+        }
+    }
+
+    @Override
+    public boolean contains(final String title) {
+        return getCdByTitle(title) != null;
     }
 }

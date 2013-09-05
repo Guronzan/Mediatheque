@@ -21,7 +21,9 @@ import lombok.NoArgsConstructor;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "book", uniqueConstraints = { @UniqueConstraint(columnNames = "BOOK_ID") })
+@Table(name = "book", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "BOOK_ID"),
+        @UniqueConstraint(columnNames = { "TITLE", "TOME" }) })
 @Data
 @NoArgsConstructor
 public class Book extends AbstractPersistentObject {
@@ -31,17 +33,20 @@ public class Book extends AbstractPersistentObject {
     @Column(name = "BOOK_ID", unique = true, nullable = false)
     private int bookId;
 
-    @Column(name = "TITLE", unique = true, nullable = false, length = 40)
+    @Column(name = "TITLE", nullable = false, length = 40)
     private String title;
 
-    @Column(name = "AUTHOR_NAME", unique = true, nullable = true, length = 30)
+    @Column(name = "AUTHOR_NAME", nullable = true, length = 30)
     private String authorName;
 
     @Column(name = "RELEASE_DATE", nullable = false, length = 20)
-    private final Date releaseDate = new Date();
+    private Date releaseDate = new Date();
 
     @Column(name = "EDITOR", nullable = false, length = 20)
     private String editor;
+
+    @Column(name = "TOME", nullable = true, length = 20)
+    private Integer tome = null;
 
     @Column(name = "PICTURE", nullable = true)
     @Getter
@@ -60,10 +65,5 @@ public class Book extends AbstractPersistentObject {
         } else {
             this.picture = null;
         }
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 }

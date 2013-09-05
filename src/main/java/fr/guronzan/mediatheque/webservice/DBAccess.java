@@ -40,7 +40,7 @@ public class DBAccess {
     }
 
     public User getUserFromID(final int id) {
-        return this.userDao.getUserById(id);
+        return this.userDao.get(id);
     }
 
     public User getUserFromFullName(final String name, final String forName) {
@@ -56,7 +56,7 @@ public class DBAccess {
     }
 
     public boolean checkPasswordFromID(final int userId, final String password) {
-        final User user = this.userDao.getUserById(userId);
+        final User user = this.userDao.get(userId);
         return user.checkPassword(password);
     }
 
@@ -67,6 +67,6 @@ public class DBAccess {
     }
 
     public boolean containsUser(final String nickName) {
-        return this.userDao.containsUser(nickName);
+        return this.userDao.contains(nickName);
     }
 }

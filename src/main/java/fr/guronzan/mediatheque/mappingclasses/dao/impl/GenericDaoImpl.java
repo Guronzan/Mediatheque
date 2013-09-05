@@ -16,7 +16,7 @@ import fr.guronzan.mediatheque.mappingclasses.domain.AbstractPersistentObject;
 @Transactional
 /**
  * 
- * @author rodriguesgu
+ * @author Guillaume
  *
  * @param <T>
  * @param <K> K : PrimaryKey

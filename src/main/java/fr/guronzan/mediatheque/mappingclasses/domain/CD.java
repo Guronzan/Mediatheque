@@ -33,7 +33,7 @@ public class CD extends AbstractPersistentObject {
     @Column(name = "TITLE", unique = true, nullable = false, length = 40)
     private String title;
 
-    @Column(name = "AUTHOR_NAME", unique = true, nullable = true, length = 30)
+    @Column(name = "AUTHOR_NAME", nullable = true, length = 30)
     private String authorName;
 
     @Column(name = "RELEASE_DATE", nullable = false, length = 20)

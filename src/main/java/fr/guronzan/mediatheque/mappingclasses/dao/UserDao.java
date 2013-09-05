@@ -5,18 +5,16 @@ import java.util.Collection;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
 
 public interface UserDao extends GenericDao<User, Integer> {
-    User getUserById(int id);
-
-    User getUserByFullName(String name, String forName);
+    User getUserByFullName(final String name, final String forName);
 
     Collection<User> getUsers();
 
-    User getUserByNickName(String nickName);
+    User getUserByNickName(final String nickName);
 
-    User checkPassword(String nickName, String encryptedPassword);
+    User checkPassword(final String nickName, final String encryptedPassword);
 
-    boolean containsUser(String nickName);
+    boolean contains(final String nickName);
 
-    void populateBooks(User userByNickName);
+    void removeAllUsers();
 
 }

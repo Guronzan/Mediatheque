@@ -6,10 +6,12 @@ import fr.guronzan.mediatheque.mappingclasses.domain.CD;
 
 public interface CDDao extends GenericDao<CD, Integer> {
 
-    CD getCDByID(int id);
+    CD getCdByTitle(final String title);
 
-    CD getCdByTitle(String title);
+    Collection<CD> getCdsByAuthor(final String name);
 
-    Collection<CD> getCdsByAuthor(String name);
+    void removeAllCDs();
+
+    boolean contains(final String title);
 
 }

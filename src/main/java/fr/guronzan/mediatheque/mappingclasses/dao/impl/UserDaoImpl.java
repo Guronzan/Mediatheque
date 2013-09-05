@@ -15,7 +15,6 @@ import fr.guronzan.mediatheque.mappingclasses.domain.User;
 
 @Repository("userDao")
 @Scope("singleton")
-@SuppressWarnings("unchecked")
 public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements
         UserDao {
 
@@ -23,20 +22,6 @@ public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements
     public UserDaoImpl(
             @Qualifier("sessionFactory") final SessionFactory sessionFactory) {
         super(sessionFactory, User.class);
-    }
-
-    @Override
-    public User getUserById(final int id) {
-        final StringBuffer hql = new StringBuffer("select user from User user ");
-        hql.append(" where user.user_id=:id ");
-        final Query query = getSession().createQuery(hql.toString());
-
-        query.setInteger("id", id);
-        final List<User> list = query.list();
-        if (list.isEmpty()) {
-            return null;
-        }
-        return list.get(0);
     }
 
     @Override
@@ -80,13 +65,16 @@ public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements
     }
 
     @Override
-    public boolean containsUser(final String nickName) {
+    public boolean contains(final String nickName) {
         return getUserByNickName(nickName) != null;
     }
 
     @Override
-    public void populateBooks(final User userByNickName) {
-        userByNickName.getBooks();
+    public void removeAllUsers() {
+        final List<User> allUsers = getAll();
+        for (final User user : allUsers) {
+            delete(user);
+        }
     }
 
 }

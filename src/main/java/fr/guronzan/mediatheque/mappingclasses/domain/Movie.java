@@ -20,7 +20,9 @@ import lombok.NoArgsConstructor;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "movie", uniqueConstraints = { @UniqueConstraint(columnNames = "MOVIE_ID") })
+@Table(name = "movie", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "MOVIE_ID"),
+        @UniqueConstraint(columnNames = { "TITLE", "SEASON" }) })
 @Data
 @NoArgsConstructor
 public class Movie extends AbstractPersistentObject {
