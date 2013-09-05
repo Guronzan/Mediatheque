@@ -15,106 +15,48 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "cd", catalog = "mediatheque", uniqueConstraints = { @UniqueConstraint(columnNames = "CD_ID") })
+@Table(name = "cd", uniqueConstraints = { @UniqueConstraint(columnNames = "CD_ID") })
+@Data
+@NoArgsConstructor
 public class CD extends AbstractPersistentObject {
 
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "CD_ID", unique = true, nullable = false)
     private int cdId;
+
+    @Column(name = "TITLE", unique = true, nullable = false, length = 40)
     private String title;
+
+    @Column(name = "AUTHOR_NAME", unique = true, nullable = true, length = 30)
     private String authorName;
+
+    @Column(name = "RELEASE_DATE", nullable = false, length = 20)
     private Date releaseDate = new Date();
+
+    @Column(name = "KIND", nullable = false, length = 20)
     private CDKindType kind;
+
+    @Column(name = "PICTURE", nullable = true)
     private byte[] picture;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cds")
     private List<User> owners = new ArrayList<>();
-
-    public CD(final int cdId, final String title, final String authorName,
-            final Date releaseDate, final CDKindType kind,
-            final byte[] picture, final List<User> owners) {
-        this.cdId = cdId;
-        this.title = title;
-        this.authorName = authorName;
-        this.releaseDate = releaseDate;
-        this.kind = kind;
-        this.picture = Arrays.copyOf(picture, picture.length);
-        this.owners = owners;
-    }
-
-    public CD() {
-        // Empty constructor
-    }
 
     public CD(final String title) {
         this.title = title;
     }
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "CD_ID", unique = true, nullable = false)
-    public int getCdId() {
-        return this.cdId;
-    }
-
-    public void setCdId(final int cdId) {
-        this.cdId = cdId;
-    }
-
-    @Column(name = "TITLE", unique = true, nullable = false, length = 40)
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(final String title) {
-        this.title = title;
-    }
-
-    @Column(name = "AUTHOR_NAME", unique = true, nullable = true, length = 30)
-    public String getAuthorName() {
-        return this.authorName;
-    }
-
-    public void setAuthorName(final String authorName) {
-        this.authorName = authorName;
-    }
-
-    @Column(name = "RELEASE_DATE", nullable = false, length = 20)
-    public Date getReleaseDate() {
-        return this.releaseDate;
-    }
-
-    public void setReleaseDate(final Date releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    @Column(name = "KIND", nullable = false, length = 20)
-    public CDKindType getKind() {
-        return this.kind;
-    }
-
-    public void setKind(final CDKindType kind) {
-        this.kind = kind;
-    }
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cds")
-    public List<User> getOwners() {
-        return this.owners;
-    }
-
-    public void setOwners(final List<User> owners) {
-        this.owners = owners;
-    }
-
-    public void addOwner(final User user) {
-        this.owners.add(user);
-    }
-
-    @Column(name = "PICTURE", nullable = true)
-    public byte[] getPicture() {
-        return this.picture;
-    }
-
     public void setPicture(final byte[] picture) {
-        this.picture = Arrays.copyOf(picture, picture.length);
+        if (picture != null) {
+            this.picture = Arrays.copyOf(picture, picture.length);
+        } else {
+            this.picture = null;
+        }
     }
 }

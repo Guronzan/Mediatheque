@@ -65,4 +65,8 @@ public class DBAccess {
         final User user = this.userDao.getUserByFullName(name, forName);
         return user.checkPassword(password);
     }
+
+    public boolean containsUser(final String nickName) {
+        return this.userDao.containsUser(nickName);
+    }
 }

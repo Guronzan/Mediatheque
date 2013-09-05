@@ -16,18 +16,17 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.util.DigestUtils;
 
-import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
+import fr.guronzan.mediatheque.webservice.DBAccess;
 
+@Slf4j
 public class CreateUser {
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(CreateUser.class);
-    private static final UserDao USER_DAO = MediathequeApplicationContext
-            .getBean(UserDao.class);
+    private static final DBAccess DB_ACCESS = MediathequeApplicationContext
+            .getBean(DBAccess.class);
 
     private JFrame frame;
     private JTextField nameField;
@@ -46,7 +45,7 @@ public class CreateUser {
                     final CreateUser window = new CreateUser();
                     window.frame.setVisible(true);
                 } catch (final Exception e) {
-                    LOGGER.error(
+                    log.error(
                             "Erreur sur la fenêtre de création des utilisateurs.",
                             e);
                 }
@@ -174,7 +173,7 @@ public class CreateUser {
     }
 
     private void createUser() {
-        final boolean userExists = USER_DAO.containsUser(this.nickField
+        final boolean userExists = DB_ACCESS.containsUser(this.nickField
                 .getText());
         if (userExists) {
             JOptionPane.showMessageDialog(null,
@@ -187,6 +186,11 @@ public class CreateUser {
                 DigestUtils.md5DigestAsHex(String.valueOf(
                         this.passwordField.getPassword()).getBytes()),
                 new Date());
-        USER_DAO.createOrUpdate(user);
+        DB_ACCESS.addUser(user);
+        JOptionPane.showMessageDialog(null,
+                "Création du compte " + user.getNickName()
+                        + " réalisée avec succès.", "Création réussie",
+                JOptionPane.INFORMATION_MESSAGE);
+        log.info("Account {} created sucessfully at {}", user, new Date());
     }
 }

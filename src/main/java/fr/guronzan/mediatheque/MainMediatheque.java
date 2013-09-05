@@ -8,12 +8,10 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MainMediatheque {
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(MainMediatheque.class);
     private JFrame frmMediatheque;
     private final JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
     private final JPanel musicPanel = new JPanel();
@@ -30,7 +28,7 @@ public class MainMediatheque {
                     final MainMediatheque window = new MainMediatheque();
                     window.frmMediatheque.setVisible(true);
                 } catch (final Exception e) {
-                    LOGGER.error(
+                    log.error(
                             "Erreur durant l'exécution de la fenêtre principale de l'application.",
                             e);
                 }

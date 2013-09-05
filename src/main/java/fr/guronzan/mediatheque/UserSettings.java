@@ -4,12 +4,10 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class UserSettings {
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(UserSettings.class);
     private JFrame frame;
 
     /**
@@ -23,7 +21,7 @@ public class UserSettings {
                     final UserSettings window = new UserSettings();
                     window.frame.setVisible(true);
                 } catch (final Exception e) {
-                    LOGGER.error(
+                    log.error(
                             "Erreur durant l'utilisation de la frame UserSettings",
                             e);
                 }

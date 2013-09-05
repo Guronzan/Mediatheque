@@ -16,15 +16,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.util.DigestUtils;
 
 import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
 
+@Slf4j
 public class Login {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Login.class);
     private static final UserDao USER_DAO = MediathequeApplicationContext
             .getBean(UserDao.class);
     private JDialog dialogLogin;
@@ -47,8 +47,7 @@ public class Login {
                     final Login window = new Login(null);
                     window.getDialogLogin().setVisible(true);
                 } catch (final Exception e) {
-                    LOGGER.error("Erreur durant l'execution de la frame Login",
-                            e);
+                    log.error("Erreur durant l'execution de la frame Login", e);
                 }
             }
         });

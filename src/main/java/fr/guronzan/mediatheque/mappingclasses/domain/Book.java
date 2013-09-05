@@ -15,94 +15,55 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "book", catalog = "mediatheque", uniqueConstraints = { @UniqueConstraint(columnNames = "BOOK_ID") })
+@Table(name = "book", uniqueConstraints = { @UniqueConstraint(columnNames = "BOOK_ID") })
+@Data
+@NoArgsConstructor
 public class Book extends AbstractPersistentObject {
 
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "BOOK_ID", unique = true, nullable = false)
     private int bookId;
-    private String title;
-    private String authorName;
-    private Date releaseDate = new Date();
-    private String editor;
-    private byte[] picture;
-    private List<User> owners = new ArrayList<>();
 
-    public Book() {
-        // Empty constructor
-    }
+    @Column(name = "TITLE", unique = true, nullable = false, length = 40)
+    private String title;
+
+    @Column(name = "AUTHOR_NAME", unique = true, nullable = true, length = 30)
+    private String authorName;
+
+    @Column(name = "RELEASE_DATE", nullable = false, length = 20)
+    private final Date releaseDate = new Date();
+
+    @Column(name = "EDITOR", nullable = false, length = 20)
+    private String editor;
+
+    @Column(name = "PICTURE", nullable = true)
+    @Getter
+    private byte[] picture;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "books")
+    private final List<User> owners = new ArrayList<>();
 
     public Book(final String title) {
         this.title = title;
     }
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "BOOK_ID", unique = true, nullable = false)
-    public int getBookId() {
-        return this.bookId;
-    }
-
-    public void setBookId(final int bookId) {
-        this.bookId = bookId;
-    }
-
-    @Column(name = "TITLE", unique = true, nullable = false, length = 40)
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(final String title) {
-        this.title = title;
-    }
-
-    @Column(name = "AUTHOR_NAME", unique = true, nullable = true, length = 30)
-    public String getAuthorName() {
-        return this.authorName;
-    }
-
-    public void setAuthorName(final String authorName) {
-        this.authorName = authorName;
-    }
-
-    @Column(name = "RELEASE_DATE", nullable = false, length = 20)
-    public Date getReleaseDate() {
-        return this.releaseDate;
-    }
-
-    public void setReleaseDate(final Date releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    @Column(name = "EDITOR", nullable = false, length = 20)
-    public String getEditor() {
-        return this.editor;
-    }
-
-    public void setEditor(final String editor) {
-        this.editor = editor;
-    }
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "books")
-    public List<User> getOwners() {
-        return this.owners;
-    }
-
-    public void setOwners(final List<User> owners) {
-        this.owners = owners;
-    }
-
-    public void addOwner(final User user) {
-        this.owners.add(user);
-    }
-
-    @Column(name = "PICTURE", nullable = true)
-    public byte[] getPicture() {
-        return this.picture;
-    }
-
     public void setPicture(final byte[] picture) {
-        this.picture = Arrays.copyOf(picture, picture.length);
+        if (picture != null) {
+            this.picture = Arrays.copyOf(picture, picture.length);
+        } else {
+            this.picture = null;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }
