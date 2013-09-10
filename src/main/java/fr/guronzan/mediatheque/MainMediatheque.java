@@ -2,8 +2,11 @@ package fr.guronzan.mediatheque;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
@@ -16,6 +19,7 @@ public class MainMediatheque {
     private final JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
     private final JPanel musicPanel = new JPanel();
     private final JPanel moviesPanel = new JPanel();
+    private final JList movieList = new JList();
 
     /**
      * Launch the application.
@@ -48,7 +52,7 @@ public class MainMediatheque {
      */
     private void initialize() {
         this.frmMediatheque = new JFrame();
-        this.frmMediatheque.setTitle("mediatheque");
+        this.frmMediatheque.setTitle("Mediatheque");
         this.frmMediatheque.setBounds(100, 100, 1073, 580);
         this.frmMediatheque.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -59,6 +63,20 @@ public class MainMediatheque {
         this.tabbedPane.setEnabledAt(0, true);
 
         this.tabbedPane.addTab("Vid\u00E9os", null, this.moviesPanel, null);
+        final GridBagLayout gblMoviesPanel = new GridBagLayout();
+        gblMoviesPanel.columnWidths = new int[] { 526, 1, 0 };
+        gblMoviesPanel.rowHeights = new int[] { 346, 0 };
+        gblMoviesPanel.columnWeights = new double[] { 1.0, 0.0,
+                Double.MIN_VALUE };
+        gblMoviesPanel.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
+        this.moviesPanel.setLayout(gblMoviesPanel);
+
+        final GridBagConstraints gbcMovieList = new GridBagConstraints();
+        gbcMovieList.fill = GridBagConstraints.VERTICAL;
+        gbcMovieList.anchor = GridBagConstraints.WEST;
+        gbcMovieList.gridx = 1;
+        gbcMovieList.gridy = 0;
+        this.moviesPanel.add(this.movieList, gbcMovieList);
     }
 
     public JFrame getFrame() {
