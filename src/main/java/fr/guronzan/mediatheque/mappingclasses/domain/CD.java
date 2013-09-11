@@ -1,5 +1,8 @@
 package fr.guronzan.mediatheque.mappingclasses.domain;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,17 +14,20 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "cd", uniqueConstraints = { @UniqueConstraint(columnNames = "CD_ID") })
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class CD extends AbstractPersistentObject {
 
@@ -42,10 +48,11 @@ public class CD extends AbstractPersistentObject {
     @Column(name = "KIND", nullable = false, length = 20)
     private CDKindType kind;
 
-    @Column(name = "PICTURE", nullable = true)
+    @Lob
+    @Column(name = "PICTURE", nullable = true, columnDefinition = "mediumblob")
     private byte[] picture;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cds")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "cds")
     private List<User> owners = new ArrayList<>();
 
     public CD(final String title) {
@@ -58,5 +65,13 @@ public class CD extends AbstractPersistentObject {
         } else {
             this.picture = null;
         }
+    }
+
+    public void addPicture(final File inputFile) throws IOException {
+        final byte[] bFile = new byte[(int) inputFile.length()];
+        try (FileInputStream fileInputStream = new FileInputStream(inputFile)) {
+            fileInputStream.read(bFile);
+        }
+        setPicture(bFile);
     }
 }

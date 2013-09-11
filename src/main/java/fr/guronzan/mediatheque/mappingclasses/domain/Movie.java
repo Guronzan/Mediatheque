@@ -1,5 +1,8 @@
 package fr.guronzan.mediatheque.mappingclasses.domain;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,11 +14,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -24,6 +29,7 @@ import static javax.persistence.GenerationType.IDENTITY;
         @UniqueConstraint(columnNames = "MOVIE_ID"),
         @UniqueConstraint(columnNames = { "TITLE", "SEASON" }) })
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class Movie extends AbstractPersistentObject {
 
@@ -47,10 +53,11 @@ public class Movie extends AbstractPersistentObject {
     @Column(name = "SEASON", nullable = true)
     private Integer season;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "movies")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "movies")
     private List<User> owners = new ArrayList<>();
 
-    @Column(name = "PICTURE", nullable = true)
+    @Lob
+    @Column(name = "PICTURE", nullable = true, columnDefinition = "mediumblob")
     private byte[] picture;
 
     public Movie(final String title, final String director,
@@ -66,6 +73,18 @@ public class Movie extends AbstractPersistentObject {
     }
 
     public void setPicture(final byte[] picture) {
-        this.picture = Arrays.copyOf(picture, picture.length);
+        if (picture != null) {
+            this.picture = Arrays.copyOf(picture, picture.length);
+        } else {
+            this.picture = null;
+        }
+    }
+
+    public void addPicture(final File inputFile) throws IOException {
+        final byte[] bFile = new byte[(int) inputFile.length()];
+        try (FileInputStream fileInputStream = new FileInputStream(inputFile)) {
+            fileInputStream.read(bFile);
+        }
+        setPicture(bFile);
     }
 }

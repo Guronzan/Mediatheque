@@ -1,5 +1,8 @@
 package fr.guronzan.mediatheque.mappingclasses.domain;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,12 +14,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -25,6 +29,7 @@ import static javax.persistence.GenerationType.IDENTITY;
         @UniqueConstraint(columnNames = "BOOK_ID"),
         @UniqueConstraint(columnNames = { "TITLE", "TOME" }) })
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class Book extends AbstractPersistentObject {
 
@@ -36,7 +41,7 @@ public class Book extends AbstractPersistentObject {
     @Column(name = "TITLE", nullable = false, length = 40)
     private String title;
 
-    @Column(name = "AUTHOR_NAME", nullable = true, length = 30)
+    @Column(name = "AUTHOR_NAME", nullable = false, length = 30)
     private String authorName;
 
     @Column(name = "RELEASE_DATE", nullable = false, length = 20)
@@ -48,11 +53,11 @@ public class Book extends AbstractPersistentObject {
     @Column(name = "TOME", nullable = true, length = 20)
     private Integer tome = null;
 
-    @Column(name = "PICTURE", nullable = true)
-    @Getter
+    @Lob
+    @Column(name = "PICTURE", nullable = true, columnDefinition = "mediumblob")
     private byte[] picture;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "books")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "books")
     private final List<User> owners = new ArrayList<>();
 
     public Book(final String title) {
@@ -65,5 +70,13 @@ public class Book extends AbstractPersistentObject {
         } else {
             this.picture = null;
         }
+    }
+
+    public void addPicture(final File inputFile) throws IOException {
+        final byte[] bFile = new byte[(int) inputFile.length()];
+        try (FileInputStream fileInputStream = new FileInputStream(inputFile)) {
+            fileInputStream.read(bFile);
+        }
+        setPicture(bFile);
     }
 }

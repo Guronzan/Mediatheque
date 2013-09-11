@@ -1,1 +1,1 @@
-java -Xdebug -Xrunjdwp:transport=dt_socket,address=8998,server=y -jar Mediatheque-0.0.1-SNAPSHOT-shaded.jar
+java -Xdebug -Xrunjdwp:transport=dt_socket,address=8998,server=y -jar target/Mediatheque-0.0.1-SNAPSHOT-shaded.jar

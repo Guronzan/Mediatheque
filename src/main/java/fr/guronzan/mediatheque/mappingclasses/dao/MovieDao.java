@@ -14,4 +14,7 @@ public interface MovieDao extends GenericDao<Movie, Integer> {
 
     Movie getMovieByTitle(final String title);
 
+    void removeAllMovies();
+
+    boolean contains(final String title);
 }

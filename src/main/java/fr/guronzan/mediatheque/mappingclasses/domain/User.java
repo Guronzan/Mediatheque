@@ -1,5 +1,8 @@
 package fr.guronzan.mediatheque.mappingclasses.domain;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -13,11 +16,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.IndexColumn;
@@ -27,6 +32,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = "USER_ID") })
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class User extends AbstractPersistentObject {
 
@@ -50,7 +56,8 @@ public class User extends AbstractPersistentObject {
     @Column(name = "REGISTRATION_DATE", nullable = false, length = 10)
     private Date registrationDate;
 
-    @Column(name = "AVATAR", nullable = true)
+    @Lob
+    @Column(name = "AVATAR", nullable = true, columnDefinition = "mediumblob")
     private byte[] avatar;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -109,5 +116,13 @@ public class User extends AbstractPersistentObject {
 
     public boolean checkPassword(final String password) {
         return this.password.equals(password);
+    }
+
+    public void addAvatar(final File inputFile) throws IOException {
+        final byte[] bFile = new byte[(int) inputFile.length()];
+        try (FileInputStream fileInputStream = new FileInputStream(inputFile)) {
+            fileInputStream.read(bFile);
+        }
+        setAvatar(bFile);
     }
 }

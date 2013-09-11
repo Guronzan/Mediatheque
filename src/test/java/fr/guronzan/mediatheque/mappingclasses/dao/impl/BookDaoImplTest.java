@@ -11,13 +11,9 @@ import fr.guronzan.mediatheque.mappingclasses.dao.BookDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.Book;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 
 public class BookDaoImplTest extends SpringTests {
 
@@ -77,10 +73,10 @@ public class BookDaoImplTest extends SpringTests {
 
     @Test
     public final void testGetBookByTitle() {
-        assertThat(this.bookDao.getBookByTitle(TITLE), is(nullValue()));
+        assertNull(this.bookDao.getBookByTitle(TITLE));
         addNewBook();
-        assertThat(this.bookDao.getBookByTitle(TITLE), is(notNullValue()));
-        assertThat(this.bookDao.getBookByTitle(TITLE2), is(nullValue()));
+        assertNotNull(this.bookDao.getBookByTitle(TITLE));
+        assertNull(this.bookDao.getBookByTitle(TITLE2));
     }
 
     @Test

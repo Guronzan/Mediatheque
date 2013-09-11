@@ -45,4 +45,17 @@ public class MovieDaoImpl extends GenericDaoImpl<Movie, Integer> implements
         query.setString("name", directorName);
         return query.list();
     }
+
+    @Override
+    public void removeAllMovies() {
+        final Collection<Movie> movies = getAll();
+        for (final Movie movie : movies) {
+            delete(movie);
+        }
+    }
+
+    @Override
+    public boolean contains(final String title) {
+        return getMovieByTitle(title) != null;
+    }
 }

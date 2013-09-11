@@ -10,6 +10,7 @@ import fr.guronzan.mediatheque.mappingclasses.dao.BookDao;
 import fr.guronzan.mediatheque.mappingclasses.dao.CDDao;
 import fr.guronzan.mediatheque.mappingclasses.dao.MovieDao;
 import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
+import fr.guronzan.mediatheque.mappingclasses.domain.Book;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
 
 @Service
@@ -68,5 +69,13 @@ public class DBAccess {
 
     public boolean containsUser(final String nickName) {
         return this.userDao.contains(nickName);
+    }
+
+    public boolean containsBook(final String text, final Integer tomeValue) {
+        return this.bookDao.contains(text, tomeValue);
+    }
+
+    public void addBook(final Book book) {
+        this.bookDao.create(book);
     }
 }
