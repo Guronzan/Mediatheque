@@ -11,7 +11,7 @@ import org.junit.Test;
 import fr.guronzan.mediatheque.mappingclasses.SpringTests;
 import fr.guronzan.mediatheque.mappingclasses.dao.CDDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.CD;
-import fr.guronzan.mediatheque.mappingclasses.domain.CDKindType;
+import fr.guronzan.mediatheque.mappingclasses.domain.types.CDKindType;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

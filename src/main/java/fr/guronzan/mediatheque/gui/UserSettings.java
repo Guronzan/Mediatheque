@@ -1,4 +1,4 @@
-package fr.guronzan.mediatheque;
+package fr.guronzan.mediatheque.gui;
 
 import java.awt.EventQueue;
 

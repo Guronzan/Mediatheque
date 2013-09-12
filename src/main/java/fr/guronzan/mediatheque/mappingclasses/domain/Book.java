@@ -26,60 +26,60 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "book", uniqueConstraints = {
-		@UniqueConstraint(columnNames = "BOOK_ID"),
-		@UniqueConstraint(columnNames = { "TITLE", "TOME" }) })
+        @UniqueConstraint(columnNames = "BOOK_ID"),
+        @UniqueConstraint(columnNames = { "TITLE", "TOME" }) })
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class Book {
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "BOOK_ID", unique = true, nullable = false)
-	private int bookId;
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "BOOK_ID", unique = true, nullable = false)
+    private int bookId;
 
-	@Column(name = "TITLE", nullable = false, length = 40)
-	private String title;
+    @Column(name = "TITLE", nullable = false, length = 40)
+    private String title;
 
-	@Column(name = "AUTHOR_NAME", nullable = false, length = 30)
-	private String authorName;
+    @Column(name = "AUTHOR_NAME", nullable = false, length = 30)
+    private String authorName;
 
-	@Column(name = "RELEASE_DATE", nullable = false, length = 20)
-	private Date releaseDate = new Date();
+    @Column(name = "RELEASE_DATE", nullable = false, length = 20)
+    private Date releaseDate = new Date();
 
-	@Column(name = "EDITOR", nullable = false, length = 20)
-	private String editor;
+    @Column(name = "EDITOR", nullable = false, length = 20)
+    private String editor;
 
-	@Column(name = "TOME", nullable = true, length = 20)
-	private Integer tome = null;
+    @Column(name = "TOME", nullable = true, length = 20)
+    private Integer tome = null;
 
-	@Lob
-	@Column(name = "PICTURE", nullable = true, columnDefinition = "mediumblob")
-	private byte[] picture;
+    @Lob
+    @Column(name = "PICTURE", nullable = true, columnDefinition = "mediumblob")
+    private byte[] picture;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "books")
-	private final List<User> owners = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "books")
+    private final List<User> owners = new ArrayList<>();
 
-	public Book(final String title) {
-		this.title = title;
-	}
+    public Book(final String title) {
+        this.title = title;
+    }
 
-	public void setPicture(final byte[] picture) {
-		if (picture != null) {
-			this.picture = Arrays.copyOf(picture, picture.length);
-		} else {
-			this.picture = null;
-		}
-	}
+    public void setPicture(final byte[] picture) {
+        if (picture != null) {
+            this.picture = Arrays.copyOf(picture, picture.length);
+        } else {
+            this.picture = null;
+        }
+    }
 
-	public void addPicture(final File inputFile) throws IOException {
-		if (inputFile != null) {
-			final byte[] bFile = new byte[(int) inputFile.length()];
-			try (FileInputStream fileInputStream = new FileInputStream(
-					inputFile)) {
-				fileInputStream.read(bFile);
-			}
-			setPicture(bFile);
-		}
-	}
+    public void addPicture(final File inputFile) throws IOException {
+        if (inputFile != null) {
+            final byte[] bFile = new byte[(int) inputFile.length()];
+            try (FileInputStream fileInputStream = new FileInputStream(
+                    inputFile)) {
+                fileInputStream.read(bFile);
+            }
+            setPicture(bFile);
+        }
+    }
 }

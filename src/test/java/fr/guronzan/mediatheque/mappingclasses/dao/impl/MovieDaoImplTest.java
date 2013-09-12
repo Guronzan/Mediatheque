@@ -15,6 +15,7 @@ import fr.guronzan.mediatheque.mappingclasses.dao.MovieDao;
 import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.Movie;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
+import fr.guronzan.mediatheque.mappingclasses.domain.types.VideoType;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -43,6 +44,7 @@ public class MovieDaoImplTest extends SpringTests {
         final Movie movie = new Movie(TITLE);
         movie.setDirectorName(DIRECTOR);
         movie.setOwnedDVD(true);
+        movie.setType(VideoType.MOVIE);
         this.movieDao.create(movie);
     }
 
