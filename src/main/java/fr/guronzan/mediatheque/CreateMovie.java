@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,23 +22,24 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.WindowConstants;
 
 import lombok.extern.slf4j.Slf4j;
-import fr.guronzan.mediatheque.mappingclasses.domain.Book;
+import fr.guronzan.mediatheque.mappingclasses.domain.Movie;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
 import fr.guronzan.mediatheque.webservice.DBAccess;
 
 @Slf4j
-public class CreateBook {
+public class CreateMovie {
 	private static final DBAccess DB_ACCESS = MediathequeApplicationContext
 			.getBean(DBAccess.class);
 
 	private JFrame frame;
 	private JTextField titleField;
-	private JTextField authorField;
-	private JTextField publicationDateField;
-	private JTextField editorField;
+	private JTextField directorField;
+	private JTextField releaseDateField;
 
 	private JSpinner tomeSpinner;
 	private File picture = null;
+
+	private final JCheckBox ownedDvDCheckbox = new JCheckBox("");
 
 	private final User currentUser;
 
@@ -51,11 +53,11 @@ public class CreateBook {
 			@Override
 			public void run() {
 				try {
-					final CreateBook window = new CreateBook(null, DB_ACCESS
+					final CreateMovie window = new CreateMovie(null, DB_ACCESS
 							.getUserFromNickName("nick"));
 					window.frame.setVisible(true);
 				} catch (final Exception e) {
-					log.error("Error while creating new book.", e);
+					log.error("Error while creating new movie.", e);
 				}
 			}
 		});
@@ -68,7 +70,7 @@ public class CreateBook {
 	 * 
 	 * @param currentUser
 	 */
-	public CreateBook(final MainMediatheque mainMediatheque,
+	public CreateMovie(final MainMediatheque mainMediatheque,
 			final User currentUser) {
 		this.currentUser = currentUser;
 		this.parent = mainMediatheque;
@@ -108,48 +110,40 @@ public class CreateBook {
 		this.frame.getContentPane().add(this.titleField, gbcTitleField);
 		this.titleField.setColumns(10);
 
-		final JLabel lblAuthor = new JLabel("Auteur");
-		final GridBagConstraints gbcLblAuthor = new GridBagConstraints();
-		gbcLblAuthor.insets = new Insets(0, 0, 5, 5);
-		gbcLblAuthor.gridx = 0;
-		gbcLblAuthor.gridy = 2;
-		this.frame.getContentPane().add(lblAuthor, gbcLblAuthor);
+		final JLabel lblRalisateur = new JLabel("R\u00E9alisateur");
+		final GridBagConstraints gbcLblRalisateur = new GridBagConstraints();
+		gbcLblRalisateur.insets = new Insets(0, 0, 5, 5);
+		gbcLblRalisateur.gridx = 0;
+		gbcLblRalisateur.gridy = 2;
+		this.frame.getContentPane().add(lblRalisateur, gbcLblRalisateur);
 
-		this.authorField = new JTextField();
-		this.authorField.setText("...");
-		final GridBagConstraints gbcAuthorField = new GridBagConstraints();
-		gbcAuthorField.insets = new Insets(0, 0, 5, 0);
-		gbcAuthorField.fill = GridBagConstraints.HORIZONTAL;
-		gbcAuthorField.gridx = 1;
-		gbcAuthorField.gridy = 2;
-		this.frame.getContentPane().add(this.authorField, gbcAuthorField);
-		this.authorField.setColumns(10);
+		this.directorField = new JTextField();
+		this.directorField.setText("...");
+		final GridBagConstraints gbcDirectorField = new GridBagConstraints();
+		gbcDirectorField.insets = new Insets(0, 0, 5, 0);
+		gbcDirectorField.fill = GridBagConstraints.HORIZONTAL;
+		gbcDirectorField.gridx = 1;
+		gbcDirectorField.gridy = 2;
+		this.frame.getContentPane().add(this.directorField, gbcDirectorField);
+		this.directorField.setColumns(10);
 
-		final JLabel lblPublicationDate = new JLabel("Date de publication");
-		final GridBagConstraints gbc_lblPublicationDate = new GridBagConstraints();
-		gbc_lblPublicationDate.insets = new Insets(0, 0, 5, 5);
-		gbc_lblPublicationDate.gridx = 0;
-		gbc_lblPublicationDate.gridy = 3;
-		this.frame.getContentPane().add(lblPublicationDate,
-				gbc_lblPublicationDate);
+		final JLabel lblReleaseDate = new JLabel("Date de sortie");
+		final GridBagConstraints gbcLblReleaseDate = new GridBagConstraints();
+		gbcLblReleaseDate.insets = new Insets(0, 0, 5, 5);
+		gbcLblReleaseDate.gridx = 0;
+		gbcLblReleaseDate.gridy = 3;
+		this.frame.getContentPane().add(lblReleaseDate, gbcLblReleaseDate);
 
-		this.publicationDateField = new JTextField();
-		this.publicationDateField.setText("...");
-		final GridBagConstraints gbcPublicationDateField = new GridBagConstraints();
-		gbcPublicationDateField.insets = new Insets(0, 0, 5, 0);
-		gbcPublicationDateField.fill = GridBagConstraints.HORIZONTAL;
-		gbcPublicationDateField.gridx = 1;
-		gbcPublicationDateField.gridy = 3;
-		this.frame.getContentPane().add(this.publicationDateField,
-				gbcPublicationDateField);
-		this.publicationDateField.setColumns(10);
-
-		final JLabel lblEditor = new JLabel("Editeur");
-		final GridBagConstraints gbcLblEditor = new GridBagConstraints();
-		gbcLblEditor.insets = new Insets(0, 0, 5, 5);
-		gbcLblEditor.gridx = 0;
-		gbcLblEditor.gridy = 4;
-		this.frame.getContentPane().add(lblEditor, gbcLblEditor);
+		this.releaseDateField = new JTextField();
+		this.releaseDateField.setText("...");
+		final GridBagConstraints gbc_releaseDateField = new GridBagConstraints();
+		gbc_releaseDateField.insets = new Insets(0, 0, 5, 0);
+		gbc_releaseDateField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_releaseDateField.gridx = 1;
+		gbc_releaseDateField.gridy = 3;
+		this.frame.getContentPane().add(this.releaseDateField,
+				gbc_releaseDateField);
+		this.releaseDateField.setColumns(10);
 
 		final JButton btnCreer = new JButton("Cr\u00E9er");
 		final GridBagConstraints gbcBtnCreer = new GridBagConstraints();
@@ -160,40 +154,45 @@ public class CreateBook {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				try {
-					if (createBook()) {
-						if (CreateBook.this.parent != null) {
-							CreateBook.this.parent.populateMovieList();
+					if (createMovie()) {
+						if (CreateMovie.this.parent != null) {
+							CreateMovie.this.parent.populateMovieList();
 						}
-						CreateBook.this.frame.dispose();
+						CreateMovie.this.frame.dispose();
 					}
 				} catch (final IOException e1) {
 					JOptionPane.showMessageDialog(
 							null,
-							"Erreur durant la création du livre : "
-									+ e1.getMessage(), "Erreur création livre",
+							"Erreur durant la création du film : "
+									+ e1.getMessage(), "Erreur création film",
 							JOptionPane.ERROR_MESSAGE);
-					CreateBook.log.error("Error while creating new book.", e1);
+					CreateMovie.log
+							.error("Error while creating new movie.", e1);
 				}
 			}
 		});
+
+		final JLabel lblOwnedDvD = new JLabel("Support DVD");
+		final GridBagConstraints gbcLblOwnedDvD = new GridBagConstraints();
+		gbcLblOwnedDvD.insets = new Insets(0, 0, 5, 5);
+		gbcLblOwnedDvD.gridx = 0;
+		gbcLblOwnedDvD.gridy = 4;
+		this.frame.getContentPane().add(lblOwnedDvD, gbcLblOwnedDvD);
+
+		final GridBagConstraints gbcOwnedDvDCheckbox = new GridBagConstraints();
+		gbcOwnedDvDCheckbox.insets = new Insets(0, 0, 5, 0);
+		gbcOwnedDvDCheckbox.gridx = 1;
+		gbcOwnedDvDCheckbox.gridy = 4;
+		this.frame.getContentPane().add(this.ownedDvDCheckbox,
+				gbcOwnedDvDCheckbox);
 		this.frame.getContentPane().add(btnCreer, gbcBtnCreer);
 
-		this.editorField = new JTextField();
-		this.editorField.setText("...");
-		this.editorField.setColumns(10);
-		final GridBagConstraints gbcEditorField = new GridBagConstraints();
-		gbcEditorField.insets = new Insets(0, 0, 5, 0);
-		gbcEditorField.fill = GridBagConstraints.HORIZONTAL;
-		gbcEditorField.gridx = 1;
-		gbcEditorField.gridy = 4;
-		this.frame.getContentPane().add(this.editorField, gbcEditorField);
-
-		final JLabel lblVolume = new JLabel("Volume");
-		final GridBagConstraints gbcLblVolume = new GridBagConstraints();
-		gbcLblVolume.insets = new Insets(0, 0, 5, 5);
-		gbcLblVolume.gridx = 0;
-		gbcLblVolume.gridy = 5;
-		this.frame.getContentPane().add(lblVolume, gbcLblVolume);
+		final JLabel lblNumber = new JLabel("Saison / Num\u00E9ro");
+		final GridBagConstraints gbcLblNumber = new GridBagConstraints();
+		gbcLblNumber.insets = new Insets(0, 0, 5, 5);
+		gbcLblNumber.gridx = 0;
+		gbcLblNumber.gridy = 5;
+		this.frame.getContentPane().add(lblNumber, gbcLblNumber);
 
 		this.tomeSpinner = new JSpinner();
 		this.tomeSpinner.setModel(new SpinnerNumberModel(0, 0, 20, 1));
@@ -203,7 +202,7 @@ public class CreateBook {
 		gbcTomeSpinner.gridy = 5;
 		this.frame.getContentPane().add(this.tomeSpinner, gbcTomeSpinner);
 
-		final JLabel lblPicture = new JLabel("Image de couverture");
+		final JLabel lblPicture = new JLabel("Affiche");
 		final GridBagConstraints gbcLblPicture = new GridBagConstraints();
 		gbcLblPicture.insets = new Insets(0, 0, 5, 5);
 		gbcLblPicture.gridx = 0;
@@ -224,10 +223,10 @@ public class CreateBook {
 				final JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setFileFilter(new ImageFileFilter());
 				final int result = fileChooser
-						.showOpenDialog(CreateBook.this.frame);
+						.showOpenDialog(CreateMovie.this.frame);
 
 				if (result == JFileChooser.APPROVE_OPTION) {
-					CreateBook.this.picture = fileChooser.getSelectedFile();
+					CreateMovie.this.picture = fileChooser.getSelectedFile();
 				}
 			}
 		});
@@ -245,18 +244,18 @@ public class CreateBook {
 		this.frame.getContentPane().add(btnQuitter, gbcBtnQuitter);
 	}
 
-	private boolean createBook() throws IOException {
+	private boolean createMovie() throws IOException {
 		final Integer tomeValue = (Integer) this.tomeSpinner.getValue();
-		final boolean bookExists;
+		final boolean movieExists;
 		if (tomeValue == 0) {
-			bookExists = DB_ACCESS
-					.containsBook(this.titleField.getText(), null);
+			movieExists = DB_ACCESS.containsMovie(this.titleField.getText(),
+					null);
 		} else {
-			bookExists = DB_ACCESS.containsBook(this.titleField.getText(),
+			movieExists = DB_ACCESS.containsMovie(this.titleField.getText(),
 					tomeValue);
 		}
 
-		if (bookExists) {
+		if (movieExists) {
 			JOptionPane
 					.showMessageDialog(
 							null,
@@ -268,44 +267,35 @@ public class CreateBook {
 		final String title = this.titleField.getText();
 		if (title.equals("...") || title.isEmpty()) {
 			JOptionPane.showMessageDialog(null,
-					"Veuillez renseigner un Titre.", "Erreur création livre",
+					"Veuillez renseigner un Titre.", "Erreur création film",
 					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
-		final String authorName = this.authorField.getText();
-		if (authorName.equals("...") || authorName.isEmpty()) {
+		final String directorName = this.directorField.getText();
+		if (directorName.equals("...") || directorName.isEmpty()) {
 			JOptionPane.showMessageDialog(null,
-					"Veuillez renseigner un auteur.", "Erreur création livre",
+					"Veuillez renseigner un auteur.", "Erreur création film",
 					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
-		final String editor = this.editorField.getText();
-		if (editor.equals("...") || editor.isEmpty()) {
-			JOptionPane.showMessageDialog(null,
-					"Veuillez renseigner un editeur.", "Erreur création livre",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
-		final Book book = new Book(title);
-		book.setAuthorName(authorName);
-		book.setEditor(editor);
-		book.addPicture(this.picture);
-		book.setTome(tomeValue);
-		this.currentUser.addBook(book);
+		final Movie movie = new Movie(title);
+		movie.setDirectorName(directorName);
+		movie.addPicture(this.picture);
+		movie.setOwnedDVD(this.ownedDvDCheckbox.isSelected());
+		this.currentUser.addMovie(movie);
 		// TODO : mettre un vrai calendrier
 		// book.setReleaseDate(this.dateField.getValue());
 
-		DB_ACCESS.addBook(book);
+		DB_ACCESS.addMovie(movie);
 		DB_ACCESS.updateUser(this.currentUser);
 
 		JOptionPane.showMessageDialog(null,
-				"Création du livre " + book.getTitle()
+				"Création du film " + movie.getTitle()
 						+ " réalisée avec succès.", "Création réussie",
 				JOptionPane.INFORMATION_MESSAGE);
-		log.info("Book {} created sucessfully at {}", book, new Date());
+		log.info("Movie {} created sucessfully at {}", movie, new Date());
 		return true;
 	}
 

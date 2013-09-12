@@ -3,22 +3,25 @@ package fr.guronzan.mediatheque;
 import javax.swing.JOptionPane;
 
 public class MainWindow {
-    /**
-     * Launch the application.
-     */
-    public static void main(final String[] args) {
-        final MainMediatheque mainMediatheque = new MainMediatheque();
-        final Login loginWindow = new Login(mainMediatheque.getFrame());
-        loginWindow.getDialogLogin().setVisible(true);
+	/**
+	 * Launch the application.
+	 */
+	public static void main(final String[] args) {
+		final MainMediatheque mainMediatheque = new MainMediatheque();
+		mainMediatheque.getFrame().setVisible(true);
 
-        final boolean result = loginWindow.getResult();
+		final Login loginWindow = new Login(mainMediatheque.getFrame());
+		loginWindow.getDialogLogin().setVisible(true);
 
-        if (result) {
-            mainMediatheque.getFrame().setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Compte inconnu ou mot de passe invalide.", "Erreur Login",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-    }
+		final String result = loginWindow.getUserNick();
+
+		if (result != null) {
+			mainMediatheque.setUserNick(result);
+			mainMediatheque.fillData();
+		} else {
+			JOptionPane.showMessageDialog(null,
+					"Compte inconnu ou mot de passe invalide.", "Erreur Login",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
 }

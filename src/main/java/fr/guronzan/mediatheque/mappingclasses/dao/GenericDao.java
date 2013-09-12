@@ -4,16 +4,16 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface GenericDao<T, K extends Serializable> {
-    K create(T persistentObject);
+	K create(final T persistentObject);
 
-    T get(K id);
+	T get(final K id);
 
-    List<T> getAll();
+	List<T> getAll();
 
-    void update(T persistentObject);
+	void update(final T persistentObject);
 
-    void createOrUpdate(T persistentObject);
+	void saveOrUpdate(final T persistentObject);
 
-    void delete(T persistentObject);
+	void delete(final T persistentObject);
 
 }

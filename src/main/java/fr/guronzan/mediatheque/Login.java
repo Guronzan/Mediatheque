@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
@@ -25,141 +26,160 @@ import fr.guronzan.mediatheque.mappingclasses.domain.User;
 
 @Slf4j
 public class Login {
-    private static final UserDao USER_DAO = MediathequeApplicationContext
-            .getBean(UserDao.class);
-    private JDialog dialogLogin;
-    private final JLabel lblPseudo = new JLabel("Pseudo");
-    private final JTextField pseudoField = new JTextField();
-    private final JLabel lblMotDePasse = new JLabel("Mot de passe");
-    private final JTextField passwordField = new JTextField();
-    private final JButton btnOK = new JButton("OK");
-    private final JButton btnQuitter = new JButton("Quitter");
-    private User user;
+	private static final UserDao USER_DAO = MediathequeApplicationContext
+			.getBean(UserDao.class);
+	private JDialog dialogLogin;
+	private final JLabel lblPseudo = new JLabel("Pseudo");
+	private final JTextField pseudoField = new JTextField();
+	private final JLabel lblMotDePasse = new JLabel("Mot de passe");
+	private final JButton btnOK = new JButton("OK");
+	private final JButton btnExit = new JButton("Quitter");
+	private User user;
+	private final JButton btnCreateAccount = new JButton("Cr\u00E9er compte");
+	private final JLabel lblCreateAccount = new JLabel("Pas encore de compte ?");
+	private final JPasswordField passwordField = new JPasswordField();
 
-    /**
-     * Launch the application.
-     */
-    public static void main(final String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final Login window = new Login(null);
-                    window.getDialogLogin().setVisible(true);
-                } catch (final Exception e) {
-                    log.error("Erreur durant l'execution de la frame Login", e);
-                }
-            }
-        });
-    }
+	/**
+	 * Launch the application.
+	 */
+	public static void main(final String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					final Login window = new Login(null);
+					window.dialogLogin.setVisible(true);
+				} catch (final Exception e) {
+					log.error("Erreur durant l'execution de la frame Login", e);
+				}
+			}
+		});
+	}
 
-    /**
-     * Create the application.
-     * 
-     * @param parent
-     */
-    public Login(final Frame parent) {
-        initialize(parent);
-    }
+	/**
+	 * Create the application.
+	 * 
+	 * @param parent
+	 */
+	public Login(final Frame parent) {
+		initialize(parent);
+	}
 
-    /**
-     * Initialize the contents of the frame.
-     * 
-     * @param parent
-     */
-    private void initialize(final Frame parent) {
-        this.passwordField.setText("...");
-        this.passwordField.setColumns(10);
-        this.dialogLogin = new JDialog(parent, true);
-        this.dialogLogin.setType(Type.POPUP);
-        this.dialogLogin.setTitle("Login");
-        this.dialogLogin.setResizable(false);
-        this.dialogLogin.setSize(300, 200);
-        this.dialogLogin.setAlwaysOnTop(true);
-        this.dialogLogin
-                .setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        final GridBagLayout gridBagLayout = new GridBagLayout();
-        gridBagLayout.columnWidths = new int[] { 110, 288, 0 };
-        gridBagLayout.rowHeights = new int[] { 0, 56, 0, 0, 0, 0 };
-        gridBagLayout.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
-        gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
-                Double.MIN_VALUE };
-        this.dialogLogin.getContentPane().setLayout(gridBagLayout);
+	/**
+	 * Initialize the contents of the frame.
+	 * 
+	 * @param parent
+	 */
+	private void initialize(final Frame parent) {
+		this.dialogLogin = new JDialog(parent, true);
+		this.dialogLogin.setType(Type.POPUP);
+		this.dialogLogin.setTitle("Login");
+		this.dialogLogin.setResizable(false);
+		this.dialogLogin.setSize(300, 221);
+		// TODO center on screen
+		this.dialogLogin
+				.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		final GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[] { 139, 288, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 56, 40, 39, 46, 0 };
+		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
+				Double.MIN_VALUE };
+		this.dialogLogin.getContentPane().setLayout(gridBagLayout);
 
-        final GridBagConstraints gbcLblPseudo = new GridBagConstraints();
-        gbcLblPseudo.fill = GridBagConstraints.VERTICAL;
-        gbcLblPseudo.insets = new Insets(0, 0, 5, 5);
-        gbcLblPseudo.gridx = 0;
-        gbcLblPseudo.gridy = 1;
-        this.dialogLogin.getContentPane().add(this.lblPseudo, gbcLblPseudo);
-        this.pseudoField.setText("...");
-        this.pseudoField.setColumns(10);
+		final GridBagConstraints gbcLblPseudo = new GridBagConstraints();
+		gbcLblPseudo.fill = GridBagConstraints.VERTICAL;
+		gbcLblPseudo.insets = new Insets(0, 0, 5, 5);
+		gbcLblPseudo.gridx = 0;
+		gbcLblPseudo.gridy = 1;
+		this.dialogLogin.getContentPane().add(this.lblPseudo, gbcLblPseudo);
+		this.pseudoField.setText("...");
+		this.pseudoField.setColumns(10);
 
-        final GridBagConstraints gbcPseudoField = new GridBagConstraints();
-        gbcPseudoField.insets = new Insets(0, 0, 5, 0);
-        gbcPseudoField.fill = GridBagConstraints.BOTH;
-        gbcPseudoField.gridx = 1;
-        gbcPseudoField.gridy = 1;
-        this.dialogLogin.getContentPane().add(this.pseudoField, gbcPseudoField);
+		final GridBagConstraints gbcPseudoField = new GridBagConstraints();
+		gbcPseudoField.insets = new Insets(0, 0, 5, 0);
+		gbcPseudoField.fill = GridBagConstraints.BOTH;
+		gbcPseudoField.gridx = 1;
+		gbcPseudoField.gridy = 1;
+		this.dialogLogin.getContentPane().add(this.pseudoField, gbcPseudoField);
 
-        final GridBagConstraints gbcLblMotDePasse = new GridBagConstraints();
-        gbcLblMotDePasse.insets = new Insets(0, 0, 5, 5);
-        gbcLblMotDePasse.gridx = 0;
-        gbcLblMotDePasse.gridy = 2;
-        this.dialogLogin.getContentPane().add(this.lblMotDePasse,
-                gbcLblMotDePasse);
+		final GridBagConstraints gbcLblMotDePasse = new GridBagConstraints();
+		gbcLblMotDePasse.insets = new Insets(0, 0, 5, 5);
+		gbcLblMotDePasse.gridx = 0;
+		gbcLblMotDePasse.gridy = 2;
+		this.dialogLogin.getContentPane().add(this.lblMotDePasse,
+				gbcLblMotDePasse);
 
-        final GridBagConstraints gbcPasswordField = new GridBagConstraints();
-        gbcPasswordField.insets = new Insets(0, 0, 5, 0);
-        gbcPasswordField.fill = GridBagConstraints.HORIZONTAL;
-        gbcPasswordField.gridx = 1;
-        gbcPasswordField.gridy = 2;
-        this.dialogLogin.getContentPane().add(this.passwordField,
-                gbcPasswordField);
+		final GridBagConstraints gbcBtnOK = new GridBagConstraints();
+		gbcBtnOK.insets = new Insets(0, 0, 0, 5);
+		gbcBtnOK.gridx = 0;
+		gbcBtnOK.gridy = 4;
+		this.btnOK.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				Login.this.user = USER_DAO.checkPassword(Login.this.pseudoField
+						.getText(), DigestUtils.md5DigestAsHex(String.valueOf(
+						Login.this.passwordField.getPassword()).getBytes()));
+				if (Login.this.user == null) {
+					JOptionPane.showMessageDialog(null,
+							"Compte inconnu ou mot de passe invalide.",
+							"Erreur Login", JOptionPane.ERROR_MESSAGE);
+				} else {
+					Login.this.dialogLogin.dispose();
+				}
+			}
+		});
+		this.dialogLogin.getContentPane().add(this.btnOK, gbcBtnOK);
 
-        final GridBagConstraints gbcBtnOK = new GridBagConstraints();
-        gbcBtnOK.insets = new Insets(0, 0, 0, 5);
-        gbcBtnOK.gridx = 0;
-        gbcBtnOK.gridy = 4;
-        this.btnOK.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                Login.this.user = USER_DAO.checkPassword(Login.this.pseudoField
-                        .getText(), DigestUtils
-                        .md5DigestAsHex(Login.this.passwordField.getText()
-                                .getBytes()));
-                if (Login.this.user == null) {
-                    JOptionPane.showMessageDialog(null,
-                            "Compte inconnu ou mot de passe invalide.",
-                            "Erreur Login", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    getDialogLogin().dispose();
-                }
-            }
-        });
-        this.dialogLogin.getContentPane().add(this.btnOK, gbcBtnOK);
+		final GridBagConstraints gbcPasswordField = new GridBagConstraints();
+		gbcPasswordField.insets = new Insets(0, 0, 5, 0);
+		gbcPasswordField.fill = GridBagConstraints.BOTH;
+		gbcPasswordField.gridx = 1;
+		gbcPasswordField.gridy = 2;
+		this.dialogLogin.getContentPane().add(this.passwordField,
+				gbcPasswordField);
 
-        final GridBagConstraints gbcBtnQuitter = new GridBagConstraints();
-        gbcBtnQuitter.gridx = 1;
-        gbcBtnQuitter.gridy = 4;
-        this.btnQuitter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        this.dialogLogin.getContentPane().add(this.btnQuitter, gbcBtnQuitter);
-    }
+		final GridBagConstraints gbcLblCreateAccount = new GridBagConstraints();
+		gbcLblCreateAccount.insets = new Insets(0, 0, 5, 5);
+		gbcLblCreateAccount.gridx = 0;
+		gbcLblCreateAccount.gridy = 3;
+		this.dialogLogin.getContentPane().add(this.lblCreateAccount,
+				gbcLblCreateAccount);
 
-    public JDialog getDialogLogin() {
-        return this.dialogLogin;
-    }
+		final GridBagConstraints gbcBtnCreateAccount = new GridBagConstraints();
+		gbcBtnCreateAccount.insets = new Insets(0, 0, 5, 0);
+		gbcBtnCreateAccount.gridx = 1;
+		gbcBtnCreateAccount.gridy = 3;
+		this.dialogLogin.getContentPane().add(this.btnCreateAccount,
+				gbcBtnCreateAccount);
+		this.btnCreateAccount.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				new CreateUser(Login.this.dialogLogin).setVisible();
+			}
+		});
 
-    public boolean getResult() {
-        return this.user != null;
-    }
+		final GridBagConstraints gbcBtnExit = new GridBagConstraints();
+		gbcBtnExit.gridx = 1;
+		gbcBtnExit.gridy = 4;
+		this.btnExit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		this.dialogLogin.getContentPane().add(this.btnExit, gbcBtnExit);
+	}
 
-    public int getUserId() {
-        return this.user.getUserId();
-    }
+	public JDialog getDialogLogin() {
+		return this.dialogLogin;
+	}
+
+	public String getUserNick() {
+		return this.user == null ? null : this.user.getNickName();
+	}
+
+	public void setVisible() {
+		this.dialogLogin.setVisible(true);
+	}
 }

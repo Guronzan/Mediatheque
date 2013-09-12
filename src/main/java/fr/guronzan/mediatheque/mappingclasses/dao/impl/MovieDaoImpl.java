@@ -16,46 +16,56 @@ import fr.guronzan.mediatheque.mappingclasses.domain.Movie;
 @Scope("singleton")
 @SuppressWarnings("unchecked")
 public class MovieDaoImpl extends GenericDaoImpl<Movie, Integer> implements
-        MovieDao {
+		MovieDao {
 
-    @Autowired
-    public MovieDaoImpl(
-            @Qualifier("sessionFactory") final SessionFactory sessionFactory) {
-        super(sessionFactory, Movie.class);
-    }
+	@Autowired
+	public MovieDaoImpl(
+			@Qualifier("sessionFactory") final SessionFactory sessionFactory) {
+		super(sessionFactory, Movie.class);
+	}
 
-    @Override
-    public Movie getMovieByTitle(final String title) {
-        final StringBuffer hql = new StringBuffer(
-                "select movie from Movie movie ");
-        hql.append(" where movie.title=:title ");
-        final Query query = getSession().createQuery(hql.toString());
+	@Override
+	public Movie getMovieByTitle(final String title) {
+		final StringBuffer hql = new StringBuffer(
+				"select movie from Movie movie ");
+		hql.append(" where movie.title=:title ");
+		final Query query = getSession().createQuery(hql.toString());
 
-        query.setString("title", title);
-        return (Movie) query.uniqueResult();
-    }
+		query.setString("title", title);
+		return (Movie) query.uniqueResult();
+	}
 
-    @Override
-    public Collection<Movie> getMoviesByDirector(final String directorName) {
-        final StringBuffer hql = new StringBuffer(
-                "select movie from Movie movie ");
-        hql.append(" where movie.directorName=:name ");
-        final Query query = getSession().createQuery(hql.toString());
+	@Override
+	public Collection<Movie> getMoviesByDirector(final String directorName) {
+		final StringBuffer hql = new StringBuffer(
+				"select movie from Movie movie ");
+		hql.append(" where movie.directorName=:name ");
+		final Query query = getSession().createQuery(hql.toString());
 
-        query.setString("name", directorName);
-        return query.list();
-    }
+		query.setString("name", directorName);
+		return query.list();
+	}
 
-    @Override
-    public void removeAllMovies() {
-        final Collection<Movie> movies = getAll();
-        for (final Movie movie : movies) {
-            delete(movie);
-        }
-    }
+	@Override
+	public void removeAllMovies() {
+		final Collection<Movie> movies = getAll();
+		for (final Movie movie : movies) {
+			delete(movie);
+		}
+	}
 
-    @Override
-    public boolean contains(final String title) {
-        return getMovieByTitle(title) != null;
-    }
+	@Override
+	public boolean contains(final String title) {
+		return getMovieByTitle(title) != null;
+	}
+
+	@Override
+	public boolean contains(final String title, final Integer season) {
+		final Movie movieByTitle = getMovieByTitle(title);
+		if (movieByTitle == null) {
+			return false;
+		}
+
+		return movieByTitle.getSeason() == season;
+	}
 }
