@@ -36,6 +36,20 @@ public class MovieDaoImpl extends GenericDaoImpl<Movie, Integer> implements
     }
 
     @Override
+    public Movie getMovieByTitleAndSeason(final String title,
+            final Integer seasonId) {
+        final StringBuffer hql = new StringBuffer(
+                "select movie from Movie movie ");
+        hql.append(" where movie.title=:title ");
+        hql.append(" and movie.season=:season");
+        final Query query = getSession().createQuery(hql.toString());
+
+        query.setString("title", title);
+        query.setInteger("season", seasonId);
+        return (Movie) query.uniqueResult();
+    }
+
+    @Override
     public Collection<Movie> getMoviesByDirector(final String directorName) {
         final StringBuffer hql = new StringBuffer(
                 "select movie from Movie movie ");

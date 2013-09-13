@@ -10,6 +10,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.guronzan.mediatheque.mappingclasses.dao.GenericDao;
+import fr.guronzan.mediatheque.mappingclasses.domain.DomainObject;
 
 @Transactional
 /**
@@ -19,8 +20,8 @@ import fr.guronzan.mediatheque.mappingclasses.dao.GenericDao;
  * @param <T>
  * @param <K> K : PrimaryKey
  */
-public abstract class GenericDaoImpl<T, K extends Serializable> extends
-        HibernateDaoSupport implements GenericDao<T, K> {
+public abstract class GenericDaoImpl<T extends DomainObject, K extends Serializable>
+        extends HibernateDaoSupport implements GenericDao<T, K> {
 
     private final Class<T> type;
 

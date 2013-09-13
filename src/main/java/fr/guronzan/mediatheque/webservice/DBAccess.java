@@ -1,6 +1,8 @@
 package fr.guronzan.mediatheque.webservice;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -12,8 +14,10 @@ import fr.guronzan.mediatheque.mappingclasses.dao.MovieDao;
 import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.Book;
 import fr.guronzan.mediatheque.mappingclasses.domain.CD;
+import fr.guronzan.mediatheque.mappingclasses.domain.DomainObject;
 import fr.guronzan.mediatheque.mappingclasses.domain.Movie;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
+import fr.guronzan.mediatheque.mappingclasses.domain.types.DataType;
 
 @Service
 public class DBAccess {
@@ -103,4 +107,102 @@ public class DBAccess {
         this.movieDao.removeAllMovies();
         this.userDao.removeAllUsers();
     }
+
+    public void updateUser(final String currentUser,
+            final String selectedElement, final DataType dataType) {
+        final User user = getUserFromNickName(currentUser);
+        switch (dataType) {
+        case BOOK:
+            final Book book = this.bookDao.getBookByTitle(selectedElement
+                    .split(" - ")[0]);
+            assert book != null;
+            user.addBook(book);
+            break;
+        case MOVIE:
+            final String[] split = selectedElement.split(" - ");
+            Movie movie;
+            if (split.length == 2) {
+                movie = this.movieDao.getMovieByTitle(split[0]);
+            } else {
+                movie = this.movieDao.getMovieByTitleAndSeason(split[0],
+                        Integer.parseInt(split[1]));
+            }
+            assert movie != null;
+            user.addMovie(movie);
+            break;
+        case MUSIC:
+            final CD cd = this.cdDao
+                    .getCdByTitle(selectedElement.split(" - ")[0]);
+            assert cd != null;
+            user.addCD(cd);
+            break;
+        default:
+            throw new IllegalArgumentException("Unknow state : "
+                    + dataType.getValue());
+        }
+        updateUser(user);
+    }
+
+    public List<? extends DomainObject> getAllNotOwned(final DataType dataType,
+            final String currentUserNick) {
+        switch (dataType) {
+        case BOOK: {
+            final List<Book> all = this.bookDao.getAll();
+            final List<Book> books = new LinkedList<>();
+            for (final Book book : all) {
+                for (final User owner : book.getOwners()) {
+                    if (owner.getNickName().equals(currentUserNick)) {
+                        continue;
+                    }
+                    books.add(book);
+                }
+            }
+            return books;
+        }
+        case MOVIE: {
+            final List<Movie> all = this.movieDao.getAll();
+            final List<Movie> movies = new LinkedList<>();
+            for (final Movie movie : all) {
+                for (final User owner : movie.getOwners()) {
+                    if (owner.getNickName().equals(currentUserNick)) {
+                        continue;
+                    }
+                    movies.add(movie);
+                }
+            }
+            return movies;
+        }
+        case MUSIC: {
+            final List<CD> all = this.cdDao.getAll();
+            final List<CD> cds = new LinkedList<>();
+            for (final CD cd : all) {
+                for (final User owner : cd.getOwners()) {
+                    if (owner.getNickName().equals(currentUserNick)) {
+                        continue;
+                    }
+                    cds.add(cd);
+                }
+            }
+            return cds;
+        }
+        default:
+            throw new IllegalArgumentException("Unknow state : "
+                    + dataType.getValue());
+        }
+    }
+
+    public Collection<? extends DomainObject> getAll(final DataType dataType) {
+        switch (dataType) {
+        case BOOK:
+            return this.bookDao.getAll();
+        case MOVIE:
+            return this.movieDao.getAll();
+        case MUSIC:
+            return this.cdDao.getAll();
+        default:
+            throw new IllegalArgumentException("Unknow state : "
+                    + dataType.getValue());
+        }
+    }
+
 }

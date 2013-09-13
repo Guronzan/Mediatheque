@@ -46,7 +46,7 @@ public class CreateMovie implements CreateDialog {
     private final JComboBox<VideoType> typeBox = new JComboBox<>();
 
     private File picture = null;
-    private final User currentUser;
+    private final String currentNick;
     private final MainMediatheque parent;
 
     /**
@@ -57,8 +57,7 @@ public class CreateMovie implements CreateDialog {
             @Override
             public void run() {
                 try {
-                    final CreateMovie window = new CreateMovie(null, DB_ACCESS
-                            .getUserFromNickName("nick"));
+                    final CreateMovie window = new CreateMovie(null, "nick");
                     window.frame.setVisible(true);
                 } catch (final Exception e) {
                     log.error("Error while creating new movie.", e);
@@ -75,8 +74,8 @@ public class CreateMovie implements CreateDialog {
      * @param currentUser
      */
     public CreateMovie(final MainMediatheque mainMediatheque,
-            final User currentUser) {
-        this.currentUser = currentUser;
+            final String currentUser) {
+        this.currentNick = currentUser;
         this.parent = mainMediatheque;
         initialize();
     }
@@ -258,28 +257,28 @@ public class CreateMovie implements CreateDialog {
         btnQuitter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                System.exit(0);
+                CreateMovie.this.frame.dispose();
             }
         });
         this.frame.getContentPane().add(btnQuitter, gbcBtnQuitter);
     }
 
     private boolean createMovie() throws IOException {
-        final Integer tomeValue = (Integer) this.tomeSpinner.getValue();
+        final Integer seasonValue = (Integer) this.tomeSpinner.getValue();
         final boolean movieExists;
-        if (tomeValue == 0) {
+        if (seasonValue == 0) {
             movieExists = DB_ACCESS.containsMovie(this.titleField.getText(),
                     null);
         } else {
             movieExists = DB_ACCESS.containsMovie(this.titleField.getText(),
-                    tomeValue);
+                    seasonValue);
         }
 
         if (movieExists) {
             JOptionPane
                     .showMessageDialog(
                             null,
-                            "Titre et tome déjà existant, veuillez le choisir dans la liste",
+                            "Titre et saison déjà existant, veuillez le choisir dans la liste",
                             "Erreur création Livre", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -295,8 +294,8 @@ public class CreateMovie implements CreateDialog {
         final String directorName = this.directorField.getText();
         if (directorName.equals("...") || directorName.isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                    "Veuillez renseigner un auteur.", "Erreur création film",
-                    JOptionPane.ERROR_MESSAGE);
+                    "Veuillez renseigner un réalisateur.",
+                    "Erreur création film", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -305,12 +304,16 @@ public class CreateMovie implements CreateDialog {
         movie.addPicture(this.picture);
         movie.setOwnedDVD(this.ownedDvDCheckbox.isSelected());
         movie.setType((VideoType) this.typeBox.getSelectedItem());
-        this.currentUser.addMovie(movie);
+
+        final User currentUser = DB_ACCESS
+                .getUserFromNickName(this.currentNick);
+
+        currentUser.addMovie(movie);
         // TODO : mettre un vrai calendrier
         // book.setReleaseDate(this.dateField.getValue());
 
         DB_ACCESS.addMovie(movie);
-        DB_ACCESS.updateUser(this.currentUser);
+        DB_ACCESS.updateUser(currentUser);
 
         JOptionPane.showMessageDialog(null,
                 "Création du film " + movie.getTitle()

@@ -32,7 +32,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class Movie {
+public class Movie implements DomainObject {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -93,5 +93,16 @@ public class Movie {
             }
             setPicture(bFile);
         }
+    }
+
+    @Override
+    public String getLblExpression() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(this.title);
+        if (this.season != null) {
+            sb.append(" - ").append(this.season);
+        }
+        sb.append(" - ").append(this.directorName);
+        return sb.toString();
     }
 }

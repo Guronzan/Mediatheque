@@ -34,7 +34,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class User {
+public class User implements DomainObject {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -123,5 +123,10 @@ public class User {
             }
             setAvatar(bFile);
         }
+    }
+
+    @Override
+    public String getLblExpression() {
+        return this.nickName;
     }
 }

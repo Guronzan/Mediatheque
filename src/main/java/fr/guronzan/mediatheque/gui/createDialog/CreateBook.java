@@ -42,7 +42,7 @@ public class CreateBook implements CreateDialog {
     private JSpinner tomeSpinner;
     private File picture = null;
 
-    private final User currentUser;
+    private final String currentNick;
 
     private final MainMediatheque parent;
 
@@ -54,8 +54,7 @@ public class CreateBook implements CreateDialog {
             @Override
             public void run() {
                 try {
-                    final CreateBook window = new CreateBook(null, DB_ACCESS
-                            .getUserFromNickName("nick"));
+                    final CreateBook window = new CreateBook(null, "nick");
                     window.frame.setVisible(true);
                 } catch (final Exception e) {
                     log.error("Error while creating new book.", e);
@@ -72,8 +71,8 @@ public class CreateBook implements CreateDialog {
      * @param currentUser
      */
     public CreateBook(final MainMediatheque mainMediatheque,
-            final User currentUser) {
-        this.currentUser = currentUser;
+            final String currentNick) {
+        this.currentNick = currentNick;
         this.parent = mainMediatheque;
         initialize();
     }
@@ -242,7 +241,7 @@ public class CreateBook implements CreateDialog {
         btnQuitter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                System.exit(0);
+                CreateBook.this.frame.dispose();
             }
         });
         this.frame.getContentPane().add(btnQuitter, gbcBtnQuitter);
@@ -297,12 +296,15 @@ public class CreateBook implements CreateDialog {
         book.setEditor(editor);
         book.addPicture(this.picture);
         book.setTome(tomeValue);
-        this.currentUser.addBook(book);
+
+        final User currentUser = DB_ACCESS
+                .getUserFromNickName(this.currentNick);
+        currentUser.addBook(book);
         // TODO : mettre un vrai calendrier
         // book.setReleaseDate(this.dateField.getValue());
 
         DB_ACCESS.addBook(book);
-        DB_ACCESS.updateUser(this.currentUser);
+        DB_ACCESS.updateUser(currentUser);
 
         JOptionPane.showMessageDialog(null,
                 "Création du livre " + book.getTitle()

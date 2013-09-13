@@ -42,7 +42,7 @@ public class CreateCD implements CreateDialog {
 
     private final JComboBox<CDKindType> kindTypeBox = new JComboBox<>();
 
-    private final User currentUser;
+    private final String currentNick;
 
     private final MainMediatheque parent;
 
@@ -54,8 +54,7 @@ public class CreateCD implements CreateDialog {
             @Override
             public void run() {
                 try {
-                    final CreateCD window = new CreateCD(null, DB_ACCESS
-                            .getUserFromNickName("nick"));
+                    final CreateCD window = new CreateCD(null, "nick");
                     window.frame.setVisible(true);
                 } catch (final Exception e) {
                     log.error("Error while creating new movie.", e);
@@ -72,8 +71,8 @@ public class CreateCD implements CreateDialog {
      * @param currentUser
      */
     public CreateCD(final MainMediatheque mainMediatheque,
-            final User currentUser) {
-        this.currentUser = currentUser;
+            final String currentUser) {
+        this.currentNick = currentUser;
         this.parent = mainMediatheque;
         initialize();
     }
@@ -226,7 +225,7 @@ public class CreateCD implements CreateDialog {
         btnQuitter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                System.exit(0);
+                CreateCD.this.frame.dispose();
             }
         });
         this.frame.getContentPane().add(btnQuitter, gbcBtnQuitter);
@@ -264,12 +263,15 @@ public class CreateCD implements CreateDialog {
         cd.setAuthorName(authorName);
         cd.addPicture(this.picture);
         cd.setKind((CDKindType) this.kindTypeBox.getSelectedItem());
-        this.currentUser.addCD(cd);
+        final User currentUser = DB_ACCESS
+                .getUserFromNickName(this.currentNick);
+
+        currentUser.addCD(cd);
         // TODO : mettre un vrai calendrier
         // cd.setReleaseDate(this.dateField.getValue());
 
         DB_ACCESS.addCD(cd);
-        DB_ACCESS.updateUser(this.currentUser);
+        DB_ACCESS.updateUser(currentUser);
 
         JOptionPane.showMessageDialog(null, "Création du CD " + cd.getTitle()
                 + " réalisée avec succès.", "Création réussie",

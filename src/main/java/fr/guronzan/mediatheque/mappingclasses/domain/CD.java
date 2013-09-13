@@ -30,7 +30,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class CD {
+public class CD implements DomainObject {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -77,5 +77,12 @@ public class CD {
             }
             setPicture(bFile);
         }
+    }
+
+    @Override
+    public String getLblExpression() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(this.title).append(" - ").append(this.authorName);
+        return sb.toString();
     }
 }

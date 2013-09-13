@@ -3,7 +3,9 @@ package fr.guronzan.mediatheque.mappingclasses.dao;
 import java.io.Serializable;
 import java.util.List;
 
-public interface GenericDao<T, K extends Serializable> {
+import fr.guronzan.mediatheque.mappingclasses.domain.DomainObject;
+
+public interface GenericDao<T extends DomainObject, K extends Serializable> {
     K create(final T persistentObject);
 
     T get(final K id);
