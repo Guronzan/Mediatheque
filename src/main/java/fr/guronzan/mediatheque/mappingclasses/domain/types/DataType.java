@@ -11,20 +11,24 @@ import fr.guronzan.mediatheque.mappingclasses.dao.MovieDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.DomainObject;
 
 public enum DataType {
-    MOVIE("Movie", CreateMovie.class, MovieDao.class), MUSIC("Music",
-            CreateCD.class, CDDao.class), BOOK("Book", CreateBook.class,
-            BookDao.class);
+    MOVIE("Movie", CreateMovie.class, MovieDao.class, "reFillMovieList"), MUSIC(
+            "Music", CreateCD.class, CDDao.class, "reFillCDList"), BOOK("Book",
+            CreateBook.class, BookDao.class, "reFillBookList");
+
     private final String value;
     private Class<? extends CreateDialog> clazz;
     private Class<? extends GenericDao<? extends DomainObject, Integer>> dao;
+    private final String reFillMethodName;
 
     private DataType(
             final String value,
             final Class<? extends CreateDialog> clazz,
-            final Class<? extends GenericDao<? extends DomainObject, Integer>> dao) {
+            final Class<? extends GenericDao<? extends DomainObject, Integer>> dao,
+            final String reFillMethodName) {
         this.value = value;
         this.clazz = clazz;
         this.dao = dao;
+        this.reFillMethodName = reFillMethodName;
     }
 
     public String getValue() {
@@ -37,5 +41,9 @@ public enum DataType {
 
     public Class<? extends GenericDao<?, Integer>> getDao() {
         return this.dao;
+    }
+
+    public String getRefillMethodName() {
+        return this.reFillMethodName;
     }
 }

@@ -11,7 +11,7 @@
 		-> correspond au LoggerFactory.getLogger(xxxx). On peut donc restreindre pour 
 		certaines classes en particuliuer et dépolluer le log de tout hibernate très 
 		pompeux... -->
-	<logger name="org.hibernate.type" level="ALL" />
+	<logger name="org.hibernate.type" level="INFO" />
 	<logger name="org.hibernate" level="INFO" />
 	<root>
 		<!-- logger de base, redirige tout vers stdout, chaque logger reimplemente 

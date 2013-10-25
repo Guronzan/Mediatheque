@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,8 @@ import javax.swing.event.ListSelectionListener;
 import lombok.extern.slf4j.Slf4j;
 import fr.guronzan.mediatheque.MediathequeApplicationContext;
 import fr.guronzan.mediatheque.gui.createDialog.CreateDialog;
+import fr.guronzan.mediatheque.mappingclasses.domain.Book;
+import fr.guronzan.mediatheque.mappingclasses.domain.CD;
 import fr.guronzan.mediatheque.mappingclasses.domain.DomainObject;
 import fr.guronzan.mediatheque.mappingclasses.domain.Movie;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
@@ -48,24 +51,50 @@ public class MainMediatheque {
     private static final DBAccess DB_ACCESS = MediathequeApplicationContext
             .getBean(DBAccess.class);
     private final Map<String, Movie> movies = new HashMap<>();
+    private final Map<String, Book> books = new HashMap<>();
+    private final Map<String, CD> cds = new HashMap<>();
 
     private JFrame frmMediatheque;
     private final JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
     private final JPanel musicPanel = new JPanel();
     private final JPanel moviesPanel = new JPanel();
-    private final JList<String> movieList = new JList<>();
-    private final JPanel mainPanel = new JPanel();
-    private final JLabel lblTitle = new JLabel("Titre");
-    private final JLabel lblPicture = new JLabel("");
+    private final JPanel mainMoviePanel = new JPanel();
+    private final JPanel mainBookPanel = new JPanel();
+    private final JPanel mainCDPanel = new JPanel();
+    private final JLabel movieLblTitle = new JLabel("Titre");
+    private final JLabel movieLblPicture = new JLabel("");
 
-    private JTextField titleField;
-    private JCheckBox chckbxSupportDvd;
+    private JTextField movieTitleField;
+    private JCheckBox movieChckbxSupportDvd;
     private String currentUserNick;
-    private JTextField directorField;
-    private JTextField releaseDateField;
+    private JTextField movieDirectorField;
+    private JTextField movieReleaseDateField;
     final JComboBox<String> existingElementBox = new JComboBox<>();
     private final JButton btnAddExisting = new JButton(
             "Ajouter l'\u00E9l\u00E9ment s\u00E9lectionn\u00E9");
+    private final JPanel bookPanel = new JPanel();
+    private GridBagConstraints gbcMainMoviePanel;
+    private GridBagConstraints gbcMainBookPanel;
+    private final JList<String> movieList = new JList<>();
+    private final JList<String> bookList = new JList<>();
+    private final JList<String> cdList = new JList<>();
+    private final JLabel cdLblTitreAlbum = new JLabel("Titre album");
+    private final JTextField cdTitleField = new JTextField();
+    private final JLabel cdLblAuthor = new JLabel("Auteur");
+    private final JTextField cdAuthorField = new JTextField();
+    private final JLabel cdLblReleaseDate = new JLabel("Date de sortie");
+    private final JTextField cdReleaseDateField = new JTextField();
+    private final JLabel cdLblPicture = new JLabel("");
+    private final JLabel cdLblKind = new JLabel("Genre");
+    private JTextField cdKindField;
+    private final JLabel bookLblTitle = new JLabel("Titre");
+    private final JTextField bookTitleField = new JTextField();
+    private final JLabel bookLblAuthor = new JLabel("Auteur");
+    private final JTextField bookAuthorField = new JTextField();
+    private final JLabel lblDateDePublication = new JLabel(
+            "Date de publication");
+    private final JTextField bookReleaseDateField = new JTextField();
+    private final JLabel bookLblPicture = new JLabel("");
 
     /**
      * Launch the application.
@@ -99,6 +128,22 @@ public class MainMediatheque {
      * Initialize the contents of the frame.
      */
     private void initialize() {
+        this.musicPanel.setName(DataType.MUSIC.getValue());
+        this.bookPanel.setName(DataType.BOOK.getValue());
+        this.moviesPanel.setName(DataType.MOVIE.getValue());
+
+        this.bookReleaseDateField.setBounds(190, 165, 182, 20);
+        this.bookReleaseDateField.setColumns(10);
+        this.bookAuthorField.setBounds(190, 109, 182, 20);
+        this.bookAuthorField.setColumns(10);
+        this.bookTitleField.setBounds(190, 66, 182, 20);
+        this.bookTitleField.setColumns(10);
+        this.cdReleaseDateField.setBounds(133, 159, 178, 20);
+        this.cdReleaseDateField.setColumns(10);
+        this.cdAuthorField.setBounds(133, 104, 178, 20);
+        this.cdAuthorField.setColumns(10);
+        this.cdTitleField.setBounds(133, 79, 178, 20);
+        this.cdTitleField.setColumns(10);
         this.frmMediatheque = new JFrame();
         this.frmMediatheque.setTitle("Mediatheque");
         this.frmMediatheque.setBounds(100, 100, 1112, 455);
@@ -107,8 +152,52 @@ public class MainMediatheque {
         this.frmMediatheque.getContentPane().add(this.tabbedPane,
                 BorderLayout.NORTH);
 
-        this.musicPanel.setName(DataType.MUSIC.getValue());
         this.tabbedPane.addTab("Musique", null, this.musicPanel, null);
+        final GridBagLayout gblMusicPanel = new GridBagLayout();
+        gblMusicPanel.columnWidths = new int[] { 284, 0, 0 };
+        gblMusicPanel.rowHeights = new int[] { 0, 0 };
+        gblMusicPanel.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+        gblMusicPanel.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
+        this.musicPanel.setLayout(gblMusicPanel);
+
+        final GridBagConstraints gbcCdList = new GridBagConstraints();
+        gbcCdList.insets = new Insets(0, 0, 0, 5);
+        gbcCdList.fill = GridBagConstraints.BOTH;
+        gbcCdList.gridx = 0;
+        gbcCdList.gridy = 0;
+        this.cdList
+                .setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        this.musicPanel.add(this.cdList, gbcCdList);
+        this.mainCDPanel.setLayout(null);
+
+        final GridBagConstraints gbcMainCDPanel = new GridBagConstraints();
+        gbcMainCDPanel.fill = GridBagConstraints.BOTH;
+        gbcMainCDPanel.gridx = 1;
+        gbcMainCDPanel.gridy = 0;
+        this.musicPanel.add(this.mainCDPanel, gbcMainCDPanel);
+        this.cdLblPicture.setBounds(339, 32, 289, 275);
+        this.mainCDPanel.add(this.cdLblPicture);
+        this.cdLblTitreAlbum.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.cdLblTitreAlbum.setBounds(21, 82, 102, 14);
+        this.mainCDPanel.add(this.cdLblTitreAlbum);
+        this.mainCDPanel.add(this.cdTitleField);
+        this.cdLblAuthor.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.cdLblAuthor.setBounds(31, 107, 92, 14);
+        this.mainCDPanel.add(this.cdLblAuthor);
+        this.mainCDPanel.add(this.cdAuthorField);
+        this.cdLblReleaseDate.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.cdLblReleaseDate.setBounds(30, 162, 93, 14);
+        this.mainCDPanel.add(this.cdLblReleaseDate);
+        this.mainCDPanel.add(this.cdReleaseDateField);
+        this.cdLblKind.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.cdLblKind.setBounds(37, 199, 86, 14);
+
+        this.mainCDPanel.add(this.cdLblKind);
+
+        this.cdKindField = new JTextField();
+        this.cdKindField.setBounds(133, 196, 86, 20);
+        this.mainCDPanel.add(this.cdKindField);
+        this.cdKindField.setColumns(10);
         this.tabbedPane.setEnabledAt(0, true);
         this.tabbedPane.addChangeListener(new ChangeListener() {
             @Override
@@ -127,51 +216,50 @@ public class MainMediatheque {
         gblMoviesPanel.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
         this.moviesPanel.setLayout(gblMoviesPanel);
 
-        this.mainPanel.setLayout(null);
+        this.mainMoviePanel.setLayout(null);
 
-        final GridBagConstraints gbcPanel = new GridBagConstraints();
-        gbcPanel.fill = GridBagConstraints.BOTH;
-        gbcPanel.gridx = 1;
-        gbcPanel.gridy = 0;
-        this.moviesPanel.setName(DataType.MOVIE.getValue());
-        this.moviesPanel.add(this.mainPanel, gbcPanel);
-        this.lblTitle.setBounds(10, 36, 46, 14);
+        this.gbcMainMoviePanel = new GridBagConstraints();
+        this.gbcMainMoviePanel.fill = GridBagConstraints.BOTH;
+        this.gbcMainMoviePanel.gridx = 1;
+        this.gbcMainMoviePanel.gridy = 0;
+        this.moviesPanel.add(this.mainMoviePanel, this.gbcMainMoviePanel);
+        this.movieLblTitle.setBounds(10, 36, 46, 14);
 
-        this.mainPanel.add(this.lblTitle);
+        this.mainMoviePanel.add(this.movieLblTitle);
 
-        this.titleField = new JTextField();
-        this.titleField.setEditable(false);
-        this.titleField.setBounds(101, 33, 229, 20);
-        this.mainPanel.add(this.titleField);
-        this.titleField.setColumns(10);
+        this.movieTitleField = new JTextField();
+        this.movieTitleField.setEditable(false);
+        this.movieTitleField.setBounds(101, 33, 229, 20);
+        this.mainMoviePanel.add(this.movieTitleField);
+        this.movieTitleField.setColumns(10);
 
-        this.chckbxSupportDvd = new JCheckBox("Support DVD");
-        this.chckbxSupportDvd.setBounds(101, 167, 97, 23);
-        this.chckbxSupportDvd.setEnabled(false);
-        this.mainPanel.add(this.chckbxSupportDvd);
+        this.movieChckbxSupportDvd = new JCheckBox("Support DVD");
+        this.movieChckbxSupportDvd.setBounds(101, 167, 97, 23);
+        this.movieChckbxSupportDvd.setEnabled(false);
+        this.mainMoviePanel.add(this.movieChckbxSupportDvd);
 
-        final JLabel lblDirector = new JLabel("R\u00E9alisateur");
-        lblDirector.setBounds(10, 72, 71, 14);
-        this.mainPanel.add(lblDirector);
+        final JLabel movieLblDirector = new JLabel("R\u00E9alisateur");
+        movieLblDirector.setBounds(10, 72, 71, 14);
+        this.mainMoviePanel.add(movieLblDirector);
 
-        this.directorField = new JTextField();
-        this.directorField.setEditable(false);
-        this.directorField.setBounds(101, 69, 229, 20);
-        this.mainPanel.add(this.directorField);
-        this.directorField.setColumns(10);
+        this.movieDirectorField = new JTextField();
+        this.movieDirectorField.setEditable(false);
+        this.movieDirectorField.setBounds(101, 69, 229, 20);
+        this.mainMoviePanel.add(this.movieDirectorField);
+        this.movieDirectorField.setColumns(10);
 
-        this.lblPicture.setBounds(374, 36, 286, 299);
-        this.mainPanel.add(this.lblPicture);
+        this.movieLblPicture.setBounds(374, 36, 286, 299);
+        this.mainMoviePanel.add(this.movieLblPicture);
 
-        final JLabel lblReleaseDate = new JLabel("Date de sortie");
-        lblReleaseDate.setBounds(10, 131, 86, 14);
-        this.mainPanel.add(lblReleaseDate);
+        final JLabel movieLblReleaseDate = new JLabel("Date de sortie");
+        movieLblReleaseDate.setBounds(10, 131, 86, 14);
+        this.mainMoviePanel.add(movieLblReleaseDate);
 
-        this.releaseDateField = new JTextField();
-        this.releaseDateField.setEditable(false);
-        this.releaseDateField.setBounds(101, 128, 184, 20);
-        this.mainPanel.add(this.releaseDateField);
-        this.releaseDateField.setColumns(10);
+        this.movieReleaseDateField = new JTextField();
+        this.movieReleaseDateField.setEditable(false);
+        this.movieReleaseDateField.setBounds(101, 128, 184, 20);
+        this.mainMoviePanel.add(this.movieReleaseDateField);
+        this.movieReleaseDateField.setColumns(10);
 
         final JPanel addPanel = new JPanel();
         this.frmMediatheque.getContentPane().add(addPanel, BorderLayout.SOUTH);
@@ -258,13 +346,59 @@ public class MainMediatheque {
         gbcMovieList.gridx = 0;
         gbcMovieList.gridy = 0;
         this.moviesPanel.add(this.movieList, gbcMovieList);
+        this.tabbedPane.addTab("Livres", null, this.bookPanel, null);
+        this.tabbedPane.setEnabledAt(2, true);
+        final GridBagLayout gblBookPanel = new GridBagLayout();
+        gblBookPanel.columnWidths = new int[] { 213, 0, 0 };
+        gblBookPanel.rowHeights = new int[] { 0, 0 };
+        gblBookPanel.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+        gblBookPanel.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
+        this.bookPanel.setLayout(gblBookPanel);
+
+        final GridBagConstraints gbcBookList = new GridBagConstraints();
+        gbcBookList.insets = new Insets(0, 0, 0, 5);
+        gbcBookList.fill = GridBagConstraints.BOTH;
+        gbcBookList.gridx = 0;
+        gbcBookList.gridy = 0;
+        this.bookList
+                .setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        this.bookPanel.add(this.bookList, gbcBookList);
+        this.mainBookPanel.setLayout(null);
+        this.gbcMainBookPanel = new GridBagConstraints();
+        this.gbcMainBookPanel.fill = GridBagConstraints.BOTH;
+        this.gbcMainBookPanel.gridx = 1;
+        this.gbcMainBookPanel.gridy = 0;
+        this.bookPanel.add(this.mainBookPanel, this.gbcMainBookPanel);
+        this.bookLblTitle.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.bookLblTitle.setBounds(38, 66, 142, 14);
+
+        this.mainBookPanel.add(this.bookLblTitle);
+
+        this.mainBookPanel.add(this.bookTitleField);
+        this.bookLblAuthor.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.bookLblAuthor.setBounds(38, 109, 142, 14);
+
+        this.mainBookPanel.add(this.bookLblAuthor);
+
+        this.mainBookPanel.add(this.bookAuthorField);
+        this.lblDateDePublication.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.lblDateDePublication.setBounds(43, 168, 137, 14);
+
+        this.mainBookPanel.add(this.lblDateDePublication);
+
+        this.mainBookPanel.add(this.bookReleaseDateField);
+        this.bookLblPicture.setBounds(442, 38, 319, 269);
+
+        this.mainBookPanel.add(this.bookLblPicture);
     }
 
     private void addExistingElement() {
         final String selectedElement = (String) this.existingElementBox
                 .getSelectedItem();
         if (selectedElement == null) {
-            // TODO add popup
+            JOptionPane.showMessageDialog(this.frmMediatheque,
+                    "Sélectionner un élément existant et non vide.", "Erreur",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
         final String name = this.tabbedPane.getSelectedComponent().getName();
@@ -272,8 +406,8 @@ public class MainMediatheque {
 
         DB_ACCESS.updateUser(this.currentUserNick, selectedElement, dataType);
         populateMovieList();
-        // populateCDList();
-        // populateBookList();
+        populateCDList();
+        populateBookList();
     }
 
     private void changeTabAction() {
@@ -301,22 +435,57 @@ public class MainMediatheque {
         final CreateDialog createDialog = ctor.newInstance(this,
                 this.currentUserNick);
         createDialog.create();
+        final Method method = MainMediatheque.class.getDeclaredMethod(dataType
+                .getRefillMethodName());
+        method.invoke(this);
     }
 
     private void reFillMovieList() {
         final Movie selectedMovie = this.movies.get(this.movieList
                 .getSelectedValue());
         if (selectedMovie != null) {
-            this.titleField.setText(selectedMovie.getTitle());
-            this.chckbxSupportDvd.setSelected(selectedMovie.isOwnedDVD());
-            this.directorField.setText(selectedMovie.getDirectorName());
-            this.releaseDateField.setText(selectedMovie.getReleaseDate()
+            this.movieTitleField.setText(selectedMovie.getTitle());
+            this.movieChckbxSupportDvd.setSelected(selectedMovie.isOwnedDVD());
+            this.movieDirectorField.setText(selectedMovie.getDirectorName());
+            this.movieReleaseDateField.setText(selectedMovie.getReleaseDate()
                     .toString());
             if (selectedMovie.getPicture() != null) {
-                this.lblPicture.setIcon(new ImageIcon(selectedMovie
+                this.movieLblPicture.setIcon(new ImageIcon(selectedMovie
                         .getPicture()));
             } else {
-                this.lblPicture.setIcon(null);
+                this.movieLblPicture.setIcon(null);
+            }
+        }
+    }
+
+    private void reFillCDList() {
+        final CD selectedCD = this.cds.get(this.cdList.getSelectedValue());
+        if (selectedCD != null) {
+            this.cdTitleField.setText(selectedCD.getTitle());
+            this.cdAuthorField.setText(selectedCD.getAuthorName());
+            this.cdKindField.setText(selectedCD.getKind().getValue());
+            if (selectedCD.getPicture() != null) {
+                this.cdLblPicture
+                        .setIcon(new ImageIcon(selectedCD.getPicture()));
+            } else {
+                this.cdLblPicture.setIcon(null);
+            }
+        }
+    }
+
+    private void reFillBookList() {
+        final Book selectedBook = this.books.get(this.bookList
+                .getSelectedValue());
+        if (selectedBook != null) {
+            this.bookTitleField.setText(selectedBook.getTitle());
+            this.bookAuthorField.setText(selectedBook.getAuthorName());
+            this.bookReleaseDateField.setText(selectedBook.getReleaseDate()
+                    .toString());
+            if (selectedBook.getPicture() != null) {
+                this.bookLblPicture.setIcon(new ImageIcon(selectedBook
+                        .getPicture()));
+            } else {
+                this.bookLblPicture.setIcon(null);
             }
         }
     }
@@ -324,14 +493,37 @@ public class MainMediatheque {
     public void populateMovieList() {
         final User currentUser = DB_ACCESS
                 .getUserFromNickName(this.currentUserNick);
-        final List<Movie> movies = currentUser.getMovies();
         final DefaultListModel<String> listModel = new DefaultListModel<>();
         this.movies.clear();
-        for (final Movie movie : movies) {
+        for (final Movie movie : currentUser.getMovies()) {
             listModel.addElement(movie.getTitle());
             this.movies.put(movie.getTitle(), movie);
         }
         this.movieList.setModel(listModel);
+    }
+
+    public void populateCDList() {
+        final User currentUser = DB_ACCESS
+                .getUserFromNickName(this.currentUserNick);
+        final DefaultListModel<String> listModel = new DefaultListModel<>();
+        this.cds.clear();
+        for (final CD cd : currentUser.getCds()) {
+            listModel.addElement(cd.getTitle());
+            this.cds.put(cd.getTitle(), cd);
+        }
+        this.cdList.setModel(listModel);
+    }
+
+    public void populateBookList() {
+        final User currentUser = DB_ACCESS
+                .getUserFromNickName(this.currentUserNick);
+        final DefaultListModel<String> listModel = new DefaultListModel<>();
+        this.books.clear();
+        for (final Book book : currentUser.getBooks()) {
+            listModel.addElement(book.getTitle());
+            this.books.put(book.getTitle(), book);
+        }
+        this.bookList.setModel(listModel);
     }
 
     public JFrame getFrame() {
@@ -344,12 +536,24 @@ public class MainMediatheque {
 
     public void fillData() {
         populateMovieList();
-        this.movieList
-                .setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        populateCDList();
+        populateBookList();
         this.movieList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(final ListSelectionEvent e) {
                 reFillMovieList();
+            }
+        });
+        this.cdList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(final ListSelectionEvent e) {
+                reFillCDList();
+            }
+        });
+        this.bookList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(final ListSelectionEvent e) {
+                reFillBookList();
             }
         });
     }
