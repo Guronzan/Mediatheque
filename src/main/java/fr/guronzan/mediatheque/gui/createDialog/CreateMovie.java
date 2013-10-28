@@ -24,6 +24,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.WindowConstants;
 
 import lombok.extern.slf4j.Slf4j;
+
+import com.toedter.calendar.JCalendar;
+
 import fr.guronzan.mediatheque.MediathequeApplicationContext;
 import fr.guronzan.mediatheque.gui.MainMediatheque;
 import fr.guronzan.mediatheque.mappingclasses.domain.Movie;
@@ -40,7 +43,7 @@ public class CreateMovie implements CreateDialog {
     private JFrame frame;
     private JTextField titleField;
     private JTextField directorField;
-    private JTextField releaseDateField;
+    private JCalendar releaseDateField;
     private JSpinner tomeSpinner;
     private final JCheckBox ownedDvDCheckbox = new JCheckBox("");
     private final JComboBox<VideoType> typeBox = new JComboBox<>();
@@ -137,8 +140,7 @@ public class CreateMovie implements CreateDialog {
         gbcLblReleaseDate.gridy = 3;
         this.frame.getContentPane().add(lblReleaseDate, gbcLblReleaseDate);
 
-        this.releaseDateField = new JTextField();
-        this.releaseDateField.setText("...");
+        this.releaseDateField = new JCalendar(new Date());
         final GridBagConstraints gbcReleaseDateField = new GridBagConstraints();
         gbcReleaseDateField.insets = new Insets(0, 0, 5, 0);
         gbcReleaseDateField.fill = GridBagConstraints.HORIZONTAL;
@@ -146,7 +148,6 @@ public class CreateMovie implements CreateDialog {
         gbcReleaseDateField.gridy = 3;
         this.frame.getContentPane().add(this.releaseDateField,
                 gbcReleaseDateField);
-        this.releaseDateField.setColumns(10);
 
         final JButton btnCreer = new JButton("Cr\u00E9er");
         final GridBagConstraints gbcBtnCreer = new GridBagConstraints();
@@ -304,13 +305,12 @@ public class CreateMovie implements CreateDialog {
         movie.addPicture(this.picture);
         movie.setOwnedDVD(this.ownedDvDCheckbox.isSelected());
         movie.setType((VideoType) this.typeBox.getSelectedItem());
+        movie.setReleaseDate(this.releaseDateField.getDate());
 
         final User currentUser = DB_ACCESS
                 .getUserFromNickName(this.currentNick);
 
         currentUser.addMovie(movie);
-        // TODO : mettre un vrai calendrier
-        // book.setReleaseDate(this.dateField.getValue());
 
         DB_ACCESS.addMovie(movie);
         DB_ACCESS.updateUser(currentUser);

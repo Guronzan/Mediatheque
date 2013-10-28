@@ -21,6 +21,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.WindowConstants;
 
 import lombok.extern.slf4j.Slf4j;
+
+import com.toedter.calendar.JCalendar;
+
 import fr.guronzan.mediatheque.MediathequeApplicationContext;
 import fr.guronzan.mediatheque.gui.MainMediatheque;
 import fr.guronzan.mediatheque.mappingclasses.domain.Book;
@@ -36,7 +39,7 @@ public class CreateBook implements CreateDialog {
     private JFrame frame;
     private JTextField titleField;
     private JTextField authorField;
-    private JTextField publicationDateField;
+    private JCalendar publicationDateField;
     private JTextField editorField;
 
     private JSpinner tomeSpinner;
@@ -135,8 +138,7 @@ public class CreateBook implements CreateDialog {
         this.frame.getContentPane().add(lblPublicationDate,
                 gbcLblPublicationDate);
 
-        this.publicationDateField = new JTextField();
-        this.publicationDateField.setText("...");
+        this.publicationDateField = new JCalendar(new Date());
         final GridBagConstraints gbcPublicationDateField = new GridBagConstraints();
         gbcPublicationDateField.insets = new Insets(0, 0, 5, 0);
         gbcPublicationDateField.fill = GridBagConstraints.HORIZONTAL;
@@ -144,7 +146,6 @@ public class CreateBook implements CreateDialog {
         gbcPublicationDateField.gridy = 3;
         this.frame.getContentPane().add(this.publicationDateField,
                 gbcPublicationDateField);
-        this.publicationDateField.setColumns(10);
 
         final JLabel lblEditor = new JLabel("Editeur");
         final GridBagConstraints gbcLblEditor = new GridBagConstraints();
@@ -164,7 +165,7 @@ public class CreateBook implements CreateDialog {
                 try {
                     if (createBook()) {
                         if (CreateBook.this.parent != null) {
-                            CreateBook.this.parent.populateMovieList();
+                            CreateBook.this.parent.populateBookList();
                         }
                         CreateBook.this.frame.dispose();
                     }
@@ -296,12 +297,11 @@ public class CreateBook implements CreateDialog {
         book.setEditor(editor);
         book.addPicture(this.picture);
         book.setTome(tomeValue);
+        book.setReleaseDate(this.publicationDateField.getDate());
 
         final User currentUser = DB_ACCESS
                 .getUserFromNickName(this.currentNick);
         currentUser.addBook(book);
-        // TODO : mettre un vrai calendrier
-        // book.setReleaseDate(this.dateField.getValue());
 
         DB_ACCESS.addBook(book);
         DB_ACCESS.updateUser(currentUser);

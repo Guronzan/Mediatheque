@@ -36,6 +36,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import lombok.extern.slf4j.Slf4j;
+
+import com.toedter.calendar.JCalendar;
+
 import fr.guronzan.mediatheque.MediathequeApplicationContext;
 import fr.guronzan.mediatheque.gui.createDialog.CreateDialog;
 import fr.guronzan.mediatheque.mappingclasses.domain.Book;
@@ -93,7 +96,7 @@ public class MainMediatheque {
     private final JTextField bookAuthorField = new JTextField();
     private final JLabel lblDateDePublication = new JLabel(
             "Date de publication");
-    private final JTextField bookReleaseDateField = new JTextField();
+    private final JCalendar bookReleaseDateField = new JCalendar();
     private final JLabel bookLblPicture = new JLabel("");
 
     /**
@@ -133,7 +136,7 @@ public class MainMediatheque {
         this.moviesPanel.setName(DataType.MOVIE.getValue());
 
         this.bookReleaseDateField.setBounds(190, 165, 182, 20);
-        this.bookReleaseDateField.setColumns(10);
+        // this.bookReleaseDateField.setColumns(10);
         this.bookAuthorField.setBounds(190, 109, 182, 20);
         this.bookAuthorField.setColumns(10);
         this.bookTitleField.setBounds(190, 66, 182, 20);
@@ -479,8 +482,7 @@ public class MainMediatheque {
         if (selectedBook != null) {
             this.bookTitleField.setText(selectedBook.getTitle());
             this.bookAuthorField.setText(selectedBook.getAuthorName());
-            this.bookReleaseDateField.setText(selectedBook.getReleaseDate()
-                    .toString());
+            this.bookReleaseDateField.setDate(selectedBook.getReleaseDate());
             if (selectedBook.getPicture() != null) {
                 this.bookLblPicture.setIcon(new ImageIcon(selectedBook
                         .getPicture()));

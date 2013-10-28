@@ -1,0 +1,28 @@
+<project name="mediatheque" default="exe" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+	<description>
+		Script de création de l'éxécutable Mediatheque
+	</description>
+	<property environment="env" />
+
+	<!-- Launch4J task -->
+	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${env.LAUNCH4J_HOME}/launch4j.jar:${env.LAUNCH4J_HOME}/lib/xstream.jar" />
+
+	<property name="mediatheque.dir">.</property>
+
+	<target name="dependencies">
+		<delete dir="${mediatheque.dir}/target" />
+
+
+		<artifact:mvn pom="${mediatheque.dir}/pom.xml" mavenHome="${env.MAVEN_HOME}" fork="true">
+			<arg value="dependency:copy-dependencies" />
+			<arg value="-DincludeScope=compile" />
+			<arg value="-DincludeScope=runtime" />
+			<arg line="clean compile assembly:single -Dmaven.test.skip=true" />
+		</artifact:mvn>
+	</target>
+
+	<target name="exe">
+		<launch4j configFile="${mediatheque.dir}/src/main/resources/launch4j.xml"/>
+	</target>
+
+</project>

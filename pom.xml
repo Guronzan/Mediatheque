@@ -49,14 +49,13 @@
 					</transformers>
 				</configuration>
 			</plugin>
-
+<!-- 
 			<plugin>
 				<groupId>org.bluestemsoftware.open.maven.plugin</groupId>
 				<artifactId>launch4j-plugin</artifactId>
 				<version>1.5.0.0</version>
 				<executions>
 
-					<!-- GUI exe -->
 					<execution>
 						<id>l4j-gui</id>
 						<phase>package</phase>
@@ -66,7 +65,7 @@
 						<configuration>
 							<headerType>gui</headerType>
 							<outfile>target/Mediatheque.exe</outfile>
-							<jar>target/${project.artifactId}-${project.version}-shaded.jar</jar> <!-- 'shaded' is the value set on shadedClassifierName above -->
+							<jar>target/${project.artifactId}-${project.version}-shaded.jar</jar>
 							<errTitle>App Err</errTitle>
 							<classPath>
 								<mainClass>fr.guronzan.mediatheque.gui.MainMediatheque</mainClass>
@@ -91,7 +90,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 		</plugins>
 	</build>
 	<dependencies>
@@ -201,6 +200,11 @@
 			<artifactId>lombok</artifactId>
 			<version>0.12.0</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.toedter</groupId>
+			<artifactId>jcalendar</artifactId>
+			<version>1.4</version>
 		</dependency>
 	</dependencies>
 </project>

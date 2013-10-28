@@ -21,6 +21,9 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import lombok.extern.slf4j.Slf4j;
+
+import com.toedter.calendar.JCalendar;
+
 import fr.guronzan.mediatheque.MediathequeApplicationContext;
 import fr.guronzan.mediatheque.gui.MainMediatheque;
 import fr.guronzan.mediatheque.mappingclasses.domain.CD;
@@ -37,7 +40,7 @@ public class CreateCD implements CreateDialog {
     private JFrame frame;
     private JTextField titleField;
     private JTextField directorField;
-    private JTextField releaseDateField;
+    private JCalendar releaseDateField;
     private File picture = null;
 
     private final JComboBox<CDKindType> kindTypeBox = new JComboBox<>();
@@ -57,7 +60,7 @@ public class CreateCD implements CreateDialog {
                     final CreateCD window = new CreateCD(null, "nick");
                     window.frame.setVisible(true);
                 } catch (final Exception e) {
-                    log.error("Error while creating new movie.", e);
+                    log.error("Error while creating new CD.", e);
                 }
             }
         });
@@ -134,8 +137,7 @@ public class CreateCD implements CreateDialog {
         gbcLblReleaseDate.gridy = 3;
         this.frame.getContentPane().add(lblReleaseDate, gbcLblReleaseDate);
 
-        this.releaseDateField = new JTextField();
-        this.releaseDateField.setText("...");
+        this.releaseDateField = new JCalendar(new Date());
         final GridBagConstraints gbcReleaseDateField = new GridBagConstraints();
         gbcReleaseDateField.insets = new Insets(0, 0, 5, 0);
         gbcReleaseDateField.fill = GridBagConstraints.HORIZONTAL;
@@ -143,7 +145,6 @@ public class CreateCD implements CreateDialog {
         gbcReleaseDateField.gridy = 3;
         this.frame.getContentPane().add(this.releaseDateField,
                 gbcReleaseDateField);
-        this.releaseDateField.setColumns(10);
 
         final JButton btnCreer = new JButton("Cr\u00E9er");
         final GridBagConstraints gbcBtnCreer = new GridBagConstraints();
@@ -156,17 +157,17 @@ public class CreateCD implements CreateDialog {
                 try {
                     if (createCD()) {
                         if (CreateCD.this.parent != null) {
-                            CreateCD.this.parent.populateMovieList();
+                            CreateCD.this.parent.populateCDList();
                         }
                         CreateCD.this.frame.dispose();
                     }
                 } catch (final IOException e1) {
                     JOptionPane.showMessageDialog(
                             null,
-                            "Erreur durant la création du film : "
-                                    + e1.getMessage(), "Erreur création film",
+                            "Erreur durant la création du CD : "
+                                    + e1.getMessage(), "Erreur création CD",
                             JOptionPane.ERROR_MESSAGE);
-                    CreateCD.log.error("Error while creating new movie.", e1);
+                    CreateCD.log.error("Error while creating new CD.", e1);
                 }
             }
         });
@@ -263,12 +264,11 @@ public class CreateCD implements CreateDialog {
         cd.setAuthorName(authorName);
         cd.addPicture(this.picture);
         cd.setKind((CDKindType) this.kindTypeBox.getSelectedItem());
+        cd.setReleaseDate(this.releaseDateField.getDate());
         final User currentUser = DB_ACCESS
                 .getUserFromNickName(this.currentNick);
 
         currentUser.addCD(cd);
-        // TODO : mettre un vrai calendrier
-        // cd.setReleaseDate(this.dateField.getValue());
 
         DB_ACCESS.addCD(cd);
         DB_ACCESS.updateUser(currentUser);
