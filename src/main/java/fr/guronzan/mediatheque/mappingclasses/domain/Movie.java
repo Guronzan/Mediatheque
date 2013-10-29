@@ -3,10 +3,10 @@ package fr.guronzan.mediatheque.mappingclasses.domain;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,7 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -48,17 +48,14 @@ public class Movie implements DomainObject {
     @Column(name = "RELEASE_DATE", nullable = false, length = 20)
     private Date releaseDate = new Date();
 
-    @Column(name = "OWNED_DVD", nullable = false)
-    private boolean ownedDVD = false;
-
     @Column(name = "SEASON", nullable = true)
     private Integer season;
 
     @Column(name = "VIDEO_KIND", nullable = false)
     private VideoType type;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "movies")
-    private List<User> owners = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "movie")
+    private Set<MovieToUser> owners = new TreeSet<>();
 
     @Lob
     @Column(name = "PICTURE", nullable = true, columnDefinition = "mediumblob")
@@ -69,7 +66,6 @@ public class Movie implements DomainObject {
         this.title = title;
         this.directorName = director;
         this.releaseDate = releaseDate;
-        this.ownedDVD = false;
     }
 
     public Movie(final String title) {

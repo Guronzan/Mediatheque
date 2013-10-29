@@ -17,11 +17,11 @@
 			<arg value="dependency:copy-dependencies" />
 			<arg value="-DincludeScope=compile" />
 			<arg value="-DincludeScope=runtime" />
-			<arg line="clean compile assembly:single -Dmaven.test.skip=true" />
+			<arg line="clean package -Dmaven.test.skip=true" />
 		</artifact:mvn>
 	</target>
 
-	<target name="exe">
+	<target name="exe" depends="dependencies">
 		<launch4j configFile="${mediatheque.dir}/src/main/resources/launch4j.xml"/>
 	</target>
 

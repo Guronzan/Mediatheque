@@ -59,5 +59,10 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 			<ref bean="sessionFactory" />
 		</constructor-arg>
 	</bean>
+	<bean class="fr.guronzan.mediatheque.mappingclasses.dao.impl.MovieToUserDaoImpl">
+		<constructor-arg>
+			<ref bean="sessionFactory" />
+		</constructor-arg>
+	</bean>
 	<tx:annotation-driven transaction-manager="transactionManager" />
 </beans>

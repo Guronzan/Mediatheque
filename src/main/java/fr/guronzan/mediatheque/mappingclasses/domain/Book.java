@@ -57,7 +57,7 @@ public class Book implements DomainObject {
     @Column(name = "PICTURE", nullable = true, columnDefinition = "mediumblob")
     private byte[] picture;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "books")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "books")
     private final List<User> owners = new ArrayList<>();
 
     public Book(final String title) {

@@ -13,7 +13,6 @@ import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -51,7 +50,6 @@ public class CreateMovie implements CreateDialog {
     private JTextField directorField;
     private JCalendar releaseDateField;
     private JSpinner tomeSpinner;
-    private final JCheckBox ownedDvDCheckbox = new JCheckBox("");
     private final JComboBox<VideoType> typeBox = new JComboBox<>();
 
     private File picture = null;
@@ -207,12 +205,6 @@ public class CreateMovie implements CreateDialog {
         gbcLblOwnedDvD.gridy = 5;
         this.frame.getContentPane().add(lblOwnedDvD, gbcLblOwnedDvD);
 
-        final GridBagConstraints gbcOwnedDvDCheckbox = new GridBagConstraints();
-        gbcOwnedDvDCheckbox.insets = new Insets(0, 0, 5, 0);
-        gbcOwnedDvDCheckbox.gridx = 1;
-        gbcOwnedDvDCheckbox.gridy = 5;
-        this.frame.getContentPane().add(this.ownedDvDCheckbox,
-                gbcOwnedDvDCheckbox);
         this.frame.getContentPane().add(btnCreer, gbcBtnCreer);
 
         final JLabel lblNumber = new JLabel("Saison / Num\u00E9ro");
@@ -311,7 +303,6 @@ public class CreateMovie implements CreateDialog {
         final Movie movie = new Movie(title);
         movie.setDirectorName(directorName);
         movie.addPicture(this.picture);
-        movie.setOwnedDVD(this.ownedDvDCheckbox.isSelected());
         movie.setType((VideoType) this.typeBox.getSelectedItem());
         movie.setReleaseDate(this.releaseDateField.getDate());
 

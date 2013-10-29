@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 import fr.guronzan.mediatheque.mappingclasses.dao.BookDao;
 import fr.guronzan.mediatheque.mappingclasses.dao.CDDao;
 import fr.guronzan.mediatheque.mappingclasses.dao.MovieDao;
+import fr.guronzan.mediatheque.mappingclasses.dao.MovieToUserDao;
 import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.Book;
 import fr.guronzan.mediatheque.mappingclasses.domain.CD;
 import fr.guronzan.mediatheque.mappingclasses.domain.DomainObject;
 import fr.guronzan.mediatheque.mappingclasses.domain.Movie;
+import fr.guronzan.mediatheque.mappingclasses.domain.MovieToUser;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
 import fr.guronzan.mediatheque.mappingclasses.domain.types.DataType;
 
@@ -33,6 +35,9 @@ public class DBAccess {
 
     @Resource
     private BookDao bookDao;
+
+    @Resource
+    private MovieToUserDao movieToUserDao;
 
     public Integer addUser(final User user) {
         return this.userDao.create(user);
@@ -128,7 +133,7 @@ public class DBAccess {
                         Integer.parseInt(split[1]));
             }
             assert movie != null;
-            user.addMovie(movie);
+            this.movieToUserDao.add(user, movie);
             break;
         case MUSIC:
             final CD cd = this.cdDao
@@ -163,8 +168,9 @@ public class DBAccess {
             final List<Movie> all = this.movieDao.getAll();
             final List<Movie> movies = new LinkedList<>();
             for (final Movie movie : all) {
-                for (final User owner : movie.getOwners()) {
-                    if (owner.getNickName().equals(currentUserNick)) {
+                for (final MovieToUser movieToUser : movie.getOwners()) {
+                    if (movieToUser.getUser().getNickName()
+                            .equals(currentUserNick)) {
                         continue;
                     }
                     movies.add(movie);

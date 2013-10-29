@@ -3,10 +3,10 @@ package fr.guronzan.mediatheque.mappingclasses.domain;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -61,19 +62,17 @@ public class User implements DomainObject {
     private byte[] avatar;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "movie_user", joinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "MOVIE_ID", nullable = false, updatable = true) })
-    @IndexColumn(name = "MOVIE_COL")
-    private List<Movie> movies = new ArrayList<>();
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "book_user", joinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "BOOK_ID", nullable = false, updatable = true) })
     @IndexColumn(name = "BOOK_COL")
-    private List<Book> books = new ArrayList<>();
+    private Set<Book> books = new TreeSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "cd_user", joinColumns = { @JoinColumn(name = "USER_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "CD_ID", nullable = false, updatable = true) })
     @IndexColumn(name = "CD_COL")
-    private List<CD> cds = new ArrayList<>();
+    private Set<CD> cds = new TreeSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<MovieToUser> movies = new TreeSet<>();
 
     /**
      * 
@@ -91,7 +90,7 @@ public class User implements DomainObject {
     }
 
     public void addMovie(final Movie movie) {
-        this.movies.add(movie);
+        this.movies.add(new MovieToUser(this, movie));
     }
 
     public void addBook(final Book book) {

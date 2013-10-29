@@ -53,7 +53,7 @@ public class CD implements DomainObject {
     @Column(name = "PICTURE", nullable = true, columnDefinition = "mediumblob")
     private byte[] picture;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "cds")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cds")
     private List<User> owners = new ArrayList<>();
 
     public CD(final String title) {

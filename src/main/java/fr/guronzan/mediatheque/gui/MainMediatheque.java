@@ -19,7 +19,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -68,7 +67,6 @@ public class MainMediatheque {
     private final JLabel movieLblPicture = new JLabel("");
 
     private JTextField movieTitleField;
-    private JCheckBox movieChckbxSupportDvd;
     private String currentUserNick;
     private JTextField movieDirectorField;
     private final JComboBox<String> existingElementBox = new JComboBox<>();
@@ -232,11 +230,6 @@ public class MainMediatheque {
         this.movieTitleField.setBounds(101, 33, 229, 20);
         this.mainMoviePanel.add(this.movieTitleField);
         this.movieTitleField.setColumns(10);
-
-        this.movieChckbxSupportDvd = new JCheckBox("Support DVD");
-        this.movieChckbxSupportDvd.setBounds(101, 167, 97, 23);
-        this.movieChckbxSupportDvd.setEnabled(false);
-        this.mainMoviePanel.add(this.movieChckbxSupportDvd);
 
         final JLabel movieLblDirector = new JLabel("R\u00E9alisateur");
         movieLblDirector.setBounds(10, 72, 71, 14);
@@ -443,7 +436,6 @@ public class MainMediatheque {
                 .getSelectedValue());
         if (selectedMovie != null) {
             this.movieTitleField.setText(selectedMovie.getTitle());
-            this.movieChckbxSupportDvd.setSelected(selectedMovie.isOwnedDVD());
             this.movieDirectorField.setText(selectedMovie.getDirectorName());
             this.movieReleaseDateField.setDate(selectedMovie.getReleaseDate());
             if (selectedMovie.getPicture() != null) {
@@ -492,10 +484,10 @@ public class MainMediatheque {
                 .getUserFromNickName(this.currentUserNick);
         final DefaultListModel<String> listModel = new DefaultListModel<>();
         this.movies.clear();
-        for (final Movie movie : currentUser.getMovies()) {
-            listModel.addElement(movie.getTitle());
-            this.movies.put(movie.getTitle(), movie);
-        }
+        // for (final Movie movie : currentUser.getMovies()) {
+        // listModel.addElement(movie.getTitle());
+        // this.movies.put(movie.getTitle(), movie);
+        // }
         this.movieList.setModel(listModel);
     }
 

@@ -12,6 +12,7 @@ import org.springframework.util.DigestUtils;
 
 import fr.guronzan.mediatheque.mappingclasses.SpringTests;
 import fr.guronzan.mediatheque.mappingclasses.dao.MovieDao;
+import fr.guronzan.mediatheque.mappingclasses.dao.MovieToUserDao;
 import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.Movie;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
@@ -34,6 +35,8 @@ public class MovieDaoImplTest extends SpringTests {
     private MovieDao movieDao;
     @Resource
     private UserDao userDao;
+    @Resource
+    private MovieToUserDao movieToUserDao;
 
     @Before
     public void cleanDB() {
@@ -43,7 +46,6 @@ public class MovieDaoImplTest extends SpringTests {
     private void addNewMovie() {
         final Movie movie = new Movie(TITLE);
         movie.setDirectorName(DIRECTOR);
-        movie.setOwnedDVD(true);
         movie.setType(VideoType.MOVIE);
         this.movieDao.create(movie);
     }
@@ -60,7 +62,6 @@ public class MovieDaoImplTest extends SpringTests {
         addNewMovie();
         assertTrue(this.movieDao.contains(TITLE));
         final Movie movieByTitle = this.movieDao.getMovieByTitle(TITLE);
-        assertTrue(movieByTitle.isOwnedDVD());
         assertNull(movieByTitle.getSeason());
         assertTrue(movieByTitle.getOwners().isEmpty());
 
@@ -70,7 +71,7 @@ public class MovieDaoImplTest extends SpringTests {
                 "nick",
                 String.valueOf(DigestUtils.md5DigestAsHex("password".getBytes())),
                 new Date());
-        user.addMovie(movieByTitle);
+        this.movieToUserDao.add(user, movieByTitle);
 
         final User userByNickName = this.userDao.getUserByNickName("nick");
         assertNull(userByNickName);
