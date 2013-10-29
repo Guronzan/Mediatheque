@@ -78,7 +78,7 @@ public class Login {
         this.dialogLogin.setTitle("Login");
         this.dialogLogin.setResizable(false);
         this.dialogLogin.setSize(300, 221);
-        // TODO center on screen
+        this.dialogLogin.setLocationRelativeTo(null);
         this.dialogLogin
                 .setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         final GridBagLayout gridBagLayout = new GridBagLayout();

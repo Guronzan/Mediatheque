@@ -1,6 +1,7 @@
 package fr.guronzan.mediatheque.gui.createDialog;
 
 import java.awt.Dialog;
+import java.awt.Dialog.ModalityType;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -80,6 +81,8 @@ public class CreateUser implements CreateDialog {
         this.dialogCreateUser.setType(Type.POPUP);
         this.dialogCreateUser
                 .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.dialogCreateUser.setLocationRelativeTo(null);
+        this.dialogCreateUser.setModalityType(ModalityType.APPLICATION_MODAL);
         final GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 118, 261, 0 };
         gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };

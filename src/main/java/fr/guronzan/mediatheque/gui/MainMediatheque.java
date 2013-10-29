@@ -71,13 +71,10 @@ public class MainMediatheque {
     private JCheckBox movieChckbxSupportDvd;
     private String currentUserNick;
     private JTextField movieDirectorField;
-    private JTextField movieReleaseDateField;
-    final JComboBox<String> existingElementBox = new JComboBox<>();
+    private final JComboBox<String> existingElementBox = new JComboBox<>();
     private final JButton btnAddExisting = new JButton(
             "Ajouter l'\u00E9l\u00E9ment s\u00E9lectionn\u00E9");
     private final JPanel bookPanel = new JPanel();
-    private GridBagConstraints gbcMainMoviePanel;
-    private GridBagConstraints gbcMainBookPanel;
     private final JList<String> movieList = new JList<>();
     private final JList<String> bookList = new JList<>();
     private final JList<String> cdList = new JList<>();
@@ -86,16 +83,17 @@ public class MainMediatheque {
     private final JLabel cdLblAuthor = new JLabel("Auteur");
     private final JTextField cdAuthorField = new JTextField();
     private final JLabel cdLblReleaseDate = new JLabel("Date de sortie");
-    private final JTextField cdReleaseDateField = new JTextField();
     private final JLabel cdLblPicture = new JLabel("");
     private final JLabel cdLblKind = new JLabel("Genre");
-    private JTextField cdKindField;
+    private final JTextField cdKindField = new JTextField();
     private final JLabel bookLblTitle = new JLabel("Titre");
     private final JTextField bookTitleField = new JTextField();
     private final JLabel bookLblAuthor = new JLabel("Auteur");
     private final JTextField bookAuthorField = new JTextField();
     private final JLabel lblDateDePublication = new JLabel(
             "Date de publication");
+    private final JCalendar movieReleaseDateField = new JCalendar();
+    private final JCalendar cdReleaseDateField = new JCalendar();
     private final JCalendar bookReleaseDateField = new JCalendar();
     private final JLabel bookLblPicture = new JLabel("");
 
@@ -108,7 +106,7 @@ public class MainMediatheque {
             public void run() {
                 try {
                     final MainMediatheque window = new MainMediatheque();
-                    window.setUserNick("nick");
+                    window.currentUserNick = "nick";
                     window.fillData();
                     window.frmMediatheque.setVisible(true);
                 } catch (final Exception e) {
@@ -136,13 +134,11 @@ public class MainMediatheque {
         this.moviesPanel.setName(DataType.MOVIE.getValue());
 
         this.bookReleaseDateField.setBounds(190, 165, 182, 20);
-        // this.bookReleaseDateField.setColumns(10);
         this.bookAuthorField.setBounds(190, 109, 182, 20);
         this.bookAuthorField.setColumns(10);
         this.bookTitleField.setBounds(190, 66, 182, 20);
         this.bookTitleField.setColumns(10);
         this.cdReleaseDateField.setBounds(133, 159, 178, 20);
-        this.cdReleaseDateField.setColumns(10);
         this.cdAuthorField.setBounds(133, 104, 178, 20);
         this.cdAuthorField.setColumns(10);
         this.cdTitleField.setBounds(133, 79, 178, 20);
@@ -151,6 +147,7 @@ public class MainMediatheque {
         this.frmMediatheque.setTitle("Mediatheque");
         this.frmMediatheque.setBounds(100, 100, 1112, 455);
         this.frmMediatheque.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frmMediatheque.setLocationRelativeTo(null);
 
         this.frmMediatheque.getContentPane().add(this.tabbedPane,
                 BorderLayout.NORTH);
@@ -191,13 +188,13 @@ public class MainMediatheque {
         this.cdLblReleaseDate.setHorizontalAlignment(SwingConstants.RIGHT);
         this.cdLblReleaseDate.setBounds(30, 162, 93, 14);
         this.mainCDPanel.add(this.cdLblReleaseDate);
+        this.cdReleaseDateField.setEnabled(false);
         this.mainCDPanel.add(this.cdReleaseDateField);
         this.cdLblKind.setHorizontalAlignment(SwingConstants.RIGHT);
         this.cdLblKind.setBounds(37, 199, 86, 14);
 
         this.mainCDPanel.add(this.cdLblKind);
 
-        this.cdKindField = new JTextField();
         this.cdKindField.setBounds(133, 196, 86, 20);
         this.mainCDPanel.add(this.cdKindField);
         this.cdKindField.setColumns(10);
@@ -221,11 +218,11 @@ public class MainMediatheque {
 
         this.mainMoviePanel.setLayout(null);
 
-        this.gbcMainMoviePanel = new GridBagConstraints();
-        this.gbcMainMoviePanel.fill = GridBagConstraints.BOTH;
-        this.gbcMainMoviePanel.gridx = 1;
-        this.gbcMainMoviePanel.gridy = 0;
-        this.moviesPanel.add(this.mainMoviePanel, this.gbcMainMoviePanel);
+        final GridBagConstraints gbcMainMoviePanel = new GridBagConstraints();
+        gbcMainMoviePanel.fill = GridBagConstraints.BOTH;
+        gbcMainMoviePanel.gridx = 1;
+        gbcMainMoviePanel.gridy = 0;
+        this.moviesPanel.add(this.mainMoviePanel, gbcMainMoviePanel);
         this.movieLblTitle.setBounds(10, 36, 46, 14);
 
         this.mainMoviePanel.add(this.movieLblTitle);
@@ -258,11 +255,9 @@ public class MainMediatheque {
         movieLblReleaseDate.setBounds(10, 131, 86, 14);
         this.mainMoviePanel.add(movieLblReleaseDate);
 
-        this.movieReleaseDateField = new JTextField();
-        this.movieReleaseDateField.setEditable(false);
+        this.movieReleaseDateField.setEnabled(false);
         this.movieReleaseDateField.setBounds(101, 128, 184, 20);
         this.mainMoviePanel.add(this.movieReleaseDateField);
-        this.movieReleaseDateField.setColumns(10);
 
         final JPanel addPanel = new JPanel();
         this.frmMediatheque.getContentPane().add(addPanel, BorderLayout.SOUTH);
@@ -367,11 +362,11 @@ public class MainMediatheque {
                 .setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         this.bookPanel.add(this.bookList, gbcBookList);
         this.mainBookPanel.setLayout(null);
-        this.gbcMainBookPanel = new GridBagConstraints();
-        this.gbcMainBookPanel.fill = GridBagConstraints.BOTH;
-        this.gbcMainBookPanel.gridx = 1;
-        this.gbcMainBookPanel.gridy = 0;
-        this.bookPanel.add(this.mainBookPanel, this.gbcMainBookPanel);
+        final GridBagConstraints gbcMainBookPanel = new GridBagConstraints();
+        gbcMainBookPanel.fill = GridBagConstraints.BOTH;
+        gbcMainBookPanel.gridx = 1;
+        gbcMainBookPanel.gridy = 0;
+        this.bookPanel.add(this.mainBookPanel, gbcMainBookPanel);
         this.bookLblTitle.setHorizontalAlignment(SwingConstants.RIGHT);
         this.bookLblTitle.setBounds(38, 66, 142, 14);
 
@@ -388,7 +383,7 @@ public class MainMediatheque {
         this.lblDateDePublication.setBounds(43, 168, 137, 14);
 
         this.mainBookPanel.add(this.lblDateDePublication);
-
+        this.bookReleaseDateField.setEnabled(false);
         this.mainBookPanel.add(this.bookReleaseDateField);
         this.bookLblPicture.setBounds(442, 38, 319, 269);
 
@@ -450,8 +445,7 @@ public class MainMediatheque {
             this.movieTitleField.setText(selectedMovie.getTitle());
             this.movieChckbxSupportDvd.setSelected(selectedMovie.isOwnedDVD());
             this.movieDirectorField.setText(selectedMovie.getDirectorName());
-            this.movieReleaseDateField.setText(selectedMovie.getReleaseDate()
-                    .toString());
+            this.movieReleaseDateField.setDate(selectedMovie.getReleaseDate());
             if (selectedMovie.getPicture() != null) {
                 this.movieLblPicture.setIcon(new ImageIcon(selectedMovie
                         .getPicture()));
@@ -467,6 +461,7 @@ public class MainMediatheque {
             this.cdTitleField.setText(selectedCD.getTitle());
             this.cdAuthorField.setText(selectedCD.getAuthorName());
             this.cdKindField.setText(selectedCD.getKind().getValue());
+            this.cdReleaseDateField.setDate(selectedCD.getReleaseDate());
             if (selectedCD.getPicture() != null) {
                 this.cdLblPicture
                         .setIcon(new ImageIcon(selectedCD.getPicture()));

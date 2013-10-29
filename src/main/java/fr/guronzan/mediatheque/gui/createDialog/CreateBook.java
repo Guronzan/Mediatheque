@@ -1,5 +1,6 @@
 package fr.guronzan.mediatheque.gui.createDialog;
 
+import java.awt.Dialog.ModalityType;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,8 +12,8 @@ import java.io.IOException;
 import java.util.Date;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
@@ -33,10 +34,12 @@ import fr.guronzan.mediatheque.webservice.DBAccess;
 
 @Slf4j
 public class CreateBook implements CreateDialog {
+    private static final String ERREUR_CREATION_LIVRE = "Erreur création livre";
+
     private static final DBAccess DB_ACCESS = MediathequeApplicationContext
             .getBean(DBAccess.class);
 
-    private JFrame frame;
+    private JDialog frame;
     private JTextField titleField;
     private JTextField authorField;
     private JCalendar publicationDateField;
@@ -84,10 +87,11 @@ public class CreateBook implements CreateDialog {
      * Initialize the contents of the frame.
      */
     private void initialize() {
-        this.frame = new JFrame();
-        this.frame.setBounds(100, 100, 450, 300);
+        this.frame = new JDialog();
+        this.frame.setBounds(100, 100, 544, 395);
         this.frame
                 .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.frame.setModalityType(ModalityType.APPLICATION_MODAL);
         final GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 118, 261, 0 };
         gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -95,6 +99,7 @@ public class CreateBook implements CreateDialog {
         gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, Double.MIN_VALUE };
         this.frame.getContentPane().setLayout(gridBagLayout);
+        this.frame.setLocationRelativeTo(null);
 
         final JLabel lblTitle = new JLabel("Titre");
         final GridBagConstraints gbcLblTitle = new GridBagConstraints();
@@ -173,7 +178,7 @@ public class CreateBook implements CreateDialog {
                     JOptionPane.showMessageDialog(
                             null,
                             "Erreur durant la création du livre : "
-                                    + e1.getMessage(), "Erreur création livre",
+                                    + e1.getMessage(), ERREUR_CREATION_LIVRE,
                             JOptionPane.ERROR_MESSAGE);
                     CreateBook.log.error("Error while creating new book.", e1);
                 }
@@ -264,14 +269,14 @@ public class CreateBook implements CreateDialog {
                     .showMessageDialog(
                             null,
                             "Titre et tome déjà existant, veuillez le choisir dans la liste",
-                            "Erreur création Livre", JOptionPane.ERROR_MESSAGE);
+                            ERREUR_CREATION_LIVRE, JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
         final String title = this.titleField.getText();
         if (title.equals("...") || title.isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                    "Veuillez renseigner un Titre.", "Erreur création livre",
+                    "Veuillez renseigner un Titre.", ERREUR_CREATION_LIVRE,
                     JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -279,7 +284,7 @@ public class CreateBook implements CreateDialog {
         final String authorName = this.authorField.getText();
         if (authorName.equals("...") || authorName.isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                    "Veuillez renseigner un auteur.", "Erreur création livre",
+                    "Veuillez renseigner un auteur.", ERREUR_CREATION_LIVRE,
                     JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -287,7 +292,7 @@ public class CreateBook implements CreateDialog {
         final String editor = this.editorField.getText();
         if (editor.equals("...") || editor.isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                    "Veuillez renseigner un editeur.", "Erreur création livre",
+                    "Veuillez renseigner un editeur.", ERREUR_CREATION_LIVRE,
                     JOptionPane.ERROR_MESSAGE);
             return false;
         }
