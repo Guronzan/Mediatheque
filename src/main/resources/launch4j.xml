@@ -1,8 +1,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\rodriguegu\workspace\Mediatheque\target\Mediatheque-0.0.1-SNAPSHOT-shaded.jar</jar>
-  <outfile>C:\Users\rodriguegu\workspace\Mediatheque\Mediatheque.exe</outfile>
+  <jar>..\target\Mediatheque-0.0.1-SNAPSHOT-shaded.jar</jar>
+  <outfile>..\Mediatheque.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
@@ -12,7 +12,7 @@
   <customProcName>false</customProcName>
   <stayAlive>false</stayAlive>
   <manifest></manifest>
-  <icon>C:\Users\rodriguegu\workspace\Mediatheque\src\main\resources\images\icone.ico</icon>
+  <icon>images\icone.ico</icon>
   <jre>
     <path></path>
     <minVersion>1.7.0</minVersion>
