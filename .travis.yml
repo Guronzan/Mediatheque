@@ -2,5 +2,5 @@ language: java
 notifications:
   irc: "irc.onlinegamesnet.net#Guronzan"
 before_script:
-  - mysql -e 'create user dbaccess identified by password dVtqMa4tWEwsnzwY;'
+  - mysql -e 'create user dbaccess identified by password 'dVtqMa4tWEwsnzwY';'
   - mysql -e 'create database mediathequetest;' -u dbaccess
