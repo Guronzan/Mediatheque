@@ -4,6 +4,6 @@ notifications:
 before_script:
   - mysql -e 'create user dbaccess identified by password "dVtqMa4tWEwsnzwY";'
   - mysql -e 'create database mediathequetest;'
-  - mysql -e --user=root 'grant usage on mediathequetest.* to dbaccess@localhost identified by "dVtqMa4tWEwsnzwY";'
-  - mysql -e --user=root 'grant all privileges on mediathequetest.* to dbaccess@localhost ;'
+  - mysql --user=root -e 'grant usage on mediathequetest.* to dbaccess@localhost identified by "dVtqMa4tWEwsnzwY";'
+  - mysql --user=root -e 'grant all privileges on mediathequetest.* to dbaccess@localhost ;'
 
