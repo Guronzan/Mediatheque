@@ -8,11 +8,11 @@ import javax.annotation.Resource;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.util.DigestUtils;
 
 import fr.guronzan.mediatheque.mappingclasses.SpringTests;
 import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
+import fr.guronzan.mediatheque.utils.DigestUtils;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -51,7 +51,7 @@ public class UserDaoImplTest extends SpringTests {
      */
     private Integer addNewUser() {
         final User user = new User(NAME, FOR_NAME, NICK,
-                DigestUtils.md5DigestAsHex(PASSWORD.getBytes()), new Date());
+                DigestUtils.hashPassword(PASSWORD), new Date());
         return this.userDao.create(user);
     }
 
@@ -62,7 +62,7 @@ public class UserDaoImplTest extends SpringTests {
      */
     private Integer addNewUser2() {
         final User user = new User(NAME, FOR_NAME, NICK2,
-                DigestUtils.md5DigestAsHex(PASSWORD.getBytes()), new Date());
+                DigestUtils.hashPassword(PASSWORD), new Date());
         return this.userDao.create(user);
     }
 
@@ -139,10 +139,10 @@ public class UserDaoImplTest extends SpringTests {
         addNewUser();
         final User userByNickName = this.userDao.getUserByNickName(NICK);
         assertThat(userByNickName.getPassword(),
-                is(DigestUtils.md5DigestAsHex(PASSWORD.getBytes())));
+                is(DigestUtils.hashPassword(PASSWORD)));
 
         final boolean checkPassword = userByNickName.checkPassword(String
-                .valueOf(DigestUtils.md5DigestAsHex(PASSWORD.getBytes())));
+                .valueOf(DigestUtils.hashPassword(PASSWORD)));
         assertTrue(checkPassword);
     }
 

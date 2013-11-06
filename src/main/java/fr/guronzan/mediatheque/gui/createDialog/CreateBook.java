@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -16,6 +17,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -23,7 +25,8 @@ import javax.swing.WindowConstants;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JMonthChooser;
+import com.toedter.calendar.JYearChooser;
 
 import fr.guronzan.mediatheque.MediathequeApplicationContext;
 import fr.guronzan.mediatheque.gui.MainMediatheque;
@@ -42,7 +45,8 @@ public class CreateBook implements CreateDialog {
     private JDialog frame;
     private JTextField titleField;
     private JTextField authorField;
-    private JCalendar publicationDateField;
+    private JMonthChooser publicationMonthField;
+    private JYearChooser publicationYearField;
     private JTextField editorField;
 
     private JSpinner tomeSpinner;
@@ -94,10 +98,10 @@ public class CreateBook implements CreateDialog {
         this.frame.setModalityType(ModalityType.APPLICATION_MODAL);
         final GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 118, 261, 0 };
-        gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         gridBagLayout.columnWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };
         gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                0.0, 0.0, Double.MIN_VALUE };
+                0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
         this.frame.getContentPane().setLayout(gridBagLayout);
         this.frame.setLocationRelativeTo(null);
 
@@ -143,14 +147,33 @@ public class CreateBook implements CreateDialog {
         this.frame.getContentPane().add(lblPublicationDate,
                 gbcLblPublicationDate);
 
-        this.publicationDateField = new JCalendar(new Date());
-        final GridBagConstraints gbcPublicationDateField = new GridBagConstraints();
-        gbcPublicationDateField.insets = new Insets(0, 0, 5, 0);
-        gbcPublicationDateField.fill = GridBagConstraints.HORIZONTAL;
-        gbcPublicationDateField.gridx = 1;
-        gbcPublicationDateField.gridy = 3;
-        this.frame.getContentPane().add(this.publicationDateField,
-                gbcPublicationDateField);
+        final JPanel datePanel = new JPanel();
+        final GridBagConstraints gbcDatePanel = new GridBagConstraints();
+        gbcDatePanel.insets = new Insets(0, 0, 5, 0);
+        gbcDatePanel.fill = GridBagConstraints.BOTH;
+        gbcDatePanel.gridx = 1;
+        gbcDatePanel.gridy = 3;
+        this.frame.getContentPane().add(datePanel, gbcDatePanel);
+        final GridBagLayout gblDatePanel = new GridBagLayout();
+        gblDatePanel.columnWidths = new int[] { 82, 97, 0 };
+        gblDatePanel.rowHeights = new int[] { 20, 0 };
+        gblDatePanel.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+        gblDatePanel.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+        datePanel.setLayout(gblDatePanel);
+
+        this.publicationMonthField = new JMonthChooser(true);
+        final GridBagConstraints gbcPublicationMonthField = new GridBagConstraints();
+        gbcPublicationMonthField.anchor = GridBagConstraints.NORTHWEST;
+        gbcPublicationMonthField.gridx = 0;
+        gbcPublicationMonthField.gridy = 0;
+        datePanel.add(this.publicationMonthField, gbcPublicationMonthField);
+        this.publicationYearField = new JYearChooser();
+        final GridBagConstraints gbcPublicationYearField = new GridBagConstraints();
+        gbcPublicationYearField.insets = new Insets(0, 0, 5, 0);
+        gbcPublicationYearField.fill = GridBagConstraints.HORIZONTAL;
+        gbcPublicationYearField.gridx = 1;
+        gbcPublicationYearField.gridy = 0;
+        datePanel.add(this.publicationYearField, gbcPublicationYearField);
 
         final JLabel lblEditor = new JLabel("Editeur");
         final GridBagConstraints gbcLblEditor = new GridBagConstraints();
@@ -161,7 +184,7 @@ public class CreateBook implements CreateDialog {
 
         final JButton btnCreer = new JButton("Cr\u00E9er");
         final GridBagConstraints gbcBtnCreer = new GridBagConstraints();
-        gbcBtnCreer.insets = new Insets(0, 0, 0, 5);
+        gbcBtnCreer.insets = new Insets(0, 0, 5, 5);
         gbcBtnCreer.gridx = 0;
         gbcBtnCreer.gridy = 7;
         btnCreer.addActionListener(new ActionListener() {
@@ -242,6 +265,7 @@ public class CreateBook implements CreateDialog {
 
         final JButton btnQuitter = new JButton("Quitter");
         final GridBagConstraints gbcBtnQuitter = new GridBagConstraints();
+        gbcBtnQuitter.insets = new Insets(0, 0, 5, 0);
         gbcBtnQuitter.gridx = 1;
         gbcBtnQuitter.gridy = 7;
         btnQuitter.addActionListener(new ActionListener() {
@@ -302,13 +326,21 @@ public class CreateBook implements CreateDialog {
         book.setEditor(editor);
         book.addPicture(this.picture);
         book.setTome(tomeValue);
-        book.setReleaseDate(this.publicationDateField.getDate());
+
+        final Calendar publicationDateCalendar = Calendar.getInstance();
+        publicationDateCalendar.set(Calendar.YEAR,
+                this.publicationYearField.getYear());
+        publicationDateCalendar.set(Calendar.MONTH,
+                this.publicationMonthField.getMonth());
+        publicationDateCalendar.set(Calendar.DAY_OF_MONTH, 1);
+        final Date publicationDate = publicationDateCalendar.getTime();
+        book.setReleaseDate(publicationDate);
 
         final User currentUser = DB_ACCESS
                 .getUserFromNickName(this.currentNick);
         currentUser.addBook(book);
 
-        DB_ACCESS.addBook(book);
+        // DB_ACCESS.addBook(book);
         DB_ACCESS.updateUser(currentUser);
 
         JOptionPane.showMessageDialog(null,

@@ -18,13 +18,11 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.util.DigestUtils;
-
 import fr.guronzan.mediatheque.MediathequeApplicationContext;
 import fr.guronzan.mediatheque.gui.createDialog.CreateUser;
 import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
+import fr.guronzan.mediatheque.utils.DigestUtils;
 
 @Slf4j
 public class Login {
@@ -120,8 +118,8 @@ public class Login {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 Login.this.user = USER_DAO.checkPassword(Login.this.pseudoField
-                        .getText(), DigestUtils.md5DigestAsHex(String.valueOf(
-                        Login.this.passwordField.getPassword()).getBytes()));
+                        .getText(), DigestUtils
+                        .hashPassword(Login.this.passwordField.getPassword()));
                 if (Login.this.user == null) {
                     JOptionPane.showMessageDialog(null,
                             "Compte inconnu ou mot de passe invalide.",

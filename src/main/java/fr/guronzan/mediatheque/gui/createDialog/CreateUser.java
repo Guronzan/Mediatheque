@@ -20,11 +20,9 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.util.DigestUtils;
-
 import fr.guronzan.mediatheque.MediathequeApplicationContext;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
+import fr.guronzan.mediatheque.utils.DigestUtils;
 import fr.guronzan.mediatheque.webservice.DBAccess;
 
 @Slf4j
@@ -207,8 +205,7 @@ public class CreateUser implements CreateDialog {
 
         final User user = new User(this.nameField.getText(),
                 this.forNameField.getText(), this.nickField.getText(),
-                DigestUtils.md5DigestAsHex(String.valueOf(
-                        this.passwordField.getPassword()).getBytes()),
+                DigestUtils.hashPassword(this.passwordField.getPassword()),
                 new Date());
         DB_ACCESS.addUser(user);
 

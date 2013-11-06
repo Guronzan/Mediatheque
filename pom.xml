@@ -28,70 +28,70 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>1.7.1</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
-					<shadedArtifactAttached>true</shadedArtifactAttached>
-					<shadedClassifierName>shaded</shadedClassifierName>
-					<transformers>
-						<transformer
-							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							<mainClass>fr.guronzan.mediatheque.gui.MainMediatheque</mainClass>
-						</transformer>
-					</transformers>
+					<archive>
+						<manifest>
+							<mainClass>fr.guronzan.mediatheque.gui.MainWindow</mainClass>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+					</archive>
 				</configuration>
 			</plugin>
-<!-- 
-			<plugin>
-				<groupId>org.bluestemsoftware.open.maven.plugin</groupId>
-				<artifactId>launch4j-plugin</artifactId>
-				<version>1.5.0.0</version>
-				<executions>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
 					<execution>
-						<id>l4j-gui</id>
+						<id>copy-dependencies</id>
 						<phase>package</phase>
 						<goals>
-							<goal>launch4j</goal>
+							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<headerType>gui</headerType>
-							<outfile>target/Mediatheque.exe</outfile>
-							<jar>target/${project.artifactId}-${project.version}-shaded.jar</jar>
-							<errTitle>App Err</errTitle>
-							<classPath>
-								<mainClass>fr.guronzan.mediatheque.gui.MainMediatheque</mainClass>
-							</classPath>
-							<icon>src/main/resources/images/icone.ico</icon>
-							<jre>
-								<minVersion>1.5.0</minVersion>
-								<initialHeapSize>128</initialHeapSize>
-								<maxHeapSize>1024</maxHeapSize>
-							</jre>
-							<versionInfo>
-								<fileVersion>1.0.0.0</fileVersion>
-								<txtFileVersion>1.0.0.0</txtFileVersion>
-								<fileDescription>Desc</fileDescription>
-								<copyright>C</copyright>
-								<productVersion>1.0.0.0</productVersion>
-								<txtProductVersion>1.0.0.0</txtProductVersion>
-								<productName>Product</productName>
-								<internalName>Product</internalName>
-								<originalFilename>Mediatheque.exe</originalFilename>
-							</versionInfo>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
 						</configuration>
 					</execution>
 				</executions>
-			</plugin> -->
+			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!-- Ignore/Execute plugin execution -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<!-- copy-dependency plugin -->
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	<dependencies>
 		<dependency>
@@ -135,17 +135,6 @@
 			<version>1.0.13</version>
 		</dependency>
 		<dependency>
-			<groupId>com.akathist.maven.plugins.launch4j</groupId>
-			<artifactId>launch4j-maven-plugin</artifactId>
-			<version>1.5.1</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>backport-util-concurrent</artifactId>
-					<groupId>backport-util-concurrent</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>3.6.10.Final</version>
@@ -168,6 +157,11 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
+			<version>3.2.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
 			<version>3.2.4.RELEASE</version>
 		</dependency>
 		<dependency>

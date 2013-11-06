@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.util.DigestUtils;
 
 import fr.guronzan.mediatheque.mappingclasses.SpringTests;
 import fr.guronzan.mediatheque.mappingclasses.dao.MovieDao;
@@ -16,6 +15,7 @@ import fr.guronzan.mediatheque.mappingclasses.dao.UserDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.Movie;
 import fr.guronzan.mediatheque.mappingclasses.domain.User;
 import fr.guronzan.mediatheque.mappingclasses.domain.types.VideoType;
+import fr.guronzan.mediatheque.utils.DigestUtils;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -64,12 +64,8 @@ public class MovieDaoImplTest extends SpringTests {
         assertNull(movieByTitle.getSeason());
         assertTrue(movieByTitle.getOwners().isEmpty());
 
-        final User user = new User(
-                "name",
-                "forName",
-                "nick",
-                String.valueOf(DigestUtils.md5DigestAsHex("password".getBytes())),
-                new Date());
+        final User user = new User("name", "forName", "nick",
+                DigestUtils.hashPassword("password"), new Date());
         user.addMovie(movieByTitle);
 
         final User userByNickName = this.userDao.getUserByNickName("nick");

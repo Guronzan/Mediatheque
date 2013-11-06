@@ -70,15 +70,18 @@ public class DBAccess {
     public boolean checkPasswordFromFullName(final String name,
             final String forName, final String password) {
         final User user = this.userDao.getUserByFullName(name, forName);
-        return user.checkPassword(password);
+        if (user != null) {
+            return user.checkPassword(password);
+        }
+        return false;
     }
 
     public boolean containsUser(final String nickName) {
         return this.userDao.contains(nickName);
     }
 
-    public boolean containsBook(final String text, final Integer tomeValue) {
-        return this.bookDao.contains(text, tomeValue);
+    public boolean containsBook(final String title, final Integer tomeValue) {
+        return this.bookDao.contains(title, tomeValue);
     }
 
     public Integer addBook(final Book book) {
@@ -204,5 +207,4 @@ public class DBAccess {
                     + dataType.getValue());
         }
     }
-
 }
