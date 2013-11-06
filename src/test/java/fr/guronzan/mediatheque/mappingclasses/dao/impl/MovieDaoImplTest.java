@@ -64,11 +64,11 @@ public class MovieDaoImplTest extends SpringTests {
         assertNull(movieByTitle.getSeason());
         assertTrue(movieByTitle.getOwners().isEmpty());
 
-        final User user = new User("name", "forName", "nick",
+        final User user = new User("name", "forName", "nick1",
                 DigestUtils.hashPassword("password"), new Date());
         user.addMovie(movieByTitle);
 
-        final User userByNickName = this.userDao.getUserByNickName("nick");
+        final User userByNickName = this.userDao.getUserByNickName("nick1");
         assertNull(userByNickName);
         this.userDao.create(user);
 
