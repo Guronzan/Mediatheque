@@ -13,6 +13,7 @@
 		très pompeux... -->
 	<logger name="org.hibernate.type" level="ALL" />
 	<logger name="org.hibernate" level="DEBUG" />
+	<logger name="com.jcraft.jsch" level="trace" />
 	<root>
 		<!-- logger de base, redirige tout vers stdout, chaque logger reimplemente 
 			une couche supplémentaire si besoin était -->
