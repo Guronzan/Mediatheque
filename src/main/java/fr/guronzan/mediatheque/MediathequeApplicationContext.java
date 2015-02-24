@@ -4,25 +4,24 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public final class MediathequeApplicationContext {
-    private static ApplicationContext context = null;
+	private static ApplicationContext context = null;
 
-    private MediathequeApplicationContext() {
-        context = new ClassPathXmlApplicationContext("spring.xml");
-    }
+	private MediathequeApplicationContext() {
+		context = new ClassPathXmlApplicationContext("spring.xml");
+	}
 
-    @SuppressWarnings({ "unchecked", "unused" })
-    public static <T> T getBean(final String clazz) {
-        if (context == null) {
-            new MediathequeApplicationContext();
-        }
-        return (T) context.getBean(clazz);
-    }
+	@SuppressWarnings("unchecked")
+	public static <T> T getBean(final String clazz) {
+		if (context == null) {
+			new MediathequeApplicationContext();
+		}
+		return (T) context.getBean(clazz);
+	}
 
-    @SuppressWarnings("unused")
-    public static <T> T getBean(final Class<T> clazz) {
-        if (context == null) {
-            new MediathequeApplicationContext();
-        }
-        return context.getBean(clazz);
-    }
+	public static <T> T getBean(final Class<T> clazz) {
+		if (context == null) {
+			new MediathequeApplicationContext();
+		}
+		return context.getBean(clazz);
+	}
 }
