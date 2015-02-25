@@ -2,6 +2,8 @@ package fr.guronzan.mediatheque.mappingclasses.dao.impl;
 
 import java.util.Collection;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +14,12 @@ import org.springframework.stereotype.Repository;
 import fr.guronzan.mediatheque.mappingclasses.dao.MovieDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.Movie;
 
+@Transactional
 @Repository("movieDao")
 @Scope("singleton")
 @SuppressWarnings("unchecked")
 public class MovieDaoImpl extends GenericDaoImpl<Movie, Integer> implements
-        MovieDao {
+MovieDao {
 
     @Autowired
     public MovieDaoImpl(
@@ -29,8 +32,7 @@ public class MovieDaoImpl extends GenericDaoImpl<Movie, Integer> implements
         final StringBuffer hql = new StringBuffer(
                 "select movie from Movie movie ");
         hql.append(" where movie.title=:title ");
-        final Query query = this.sessionFactory.getCurrentSession()
-                .createQuery(hql.toString());
+        final Query query = getSession().createQuery(hql.toString());
 
         query.setString("title", title);
         return (Movie) query.uniqueResult();
@@ -43,8 +45,7 @@ public class MovieDaoImpl extends GenericDaoImpl<Movie, Integer> implements
                 "select movie from Movie movie ");
         hql.append(" where movie.title=:title ");
         hql.append(" and movie.season=:season");
-        final Query query = this.sessionFactory.getCurrentSession()
-                .createQuery(hql.toString());
+        final Query query = getSession().createQuery(hql.toString());
 
         query.setString("title", title);
         query.setInteger("season", seasonId);
@@ -56,8 +57,7 @@ public class MovieDaoImpl extends GenericDaoImpl<Movie, Integer> implements
         final StringBuffer hql = new StringBuffer(
                 "select movie from Movie movie ");
         hql.append(" where movie.directorName=:name ");
-        final Query query = this.sessionFactory.getCurrentSession()
-                .createQuery(hql.toString());
+        final Query query = getSession().createQuery(hql.toString());
 
         query.setString("name", directorName);
         return query.list();

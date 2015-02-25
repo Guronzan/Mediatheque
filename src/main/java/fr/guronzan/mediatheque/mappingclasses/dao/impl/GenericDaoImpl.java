@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Hibernate;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
@@ -25,7 +26,8 @@ public abstract class GenericDaoImpl<T extends DomainObject, K extends Serializa
         extends HibernateDaoSupport implements GenericDao<T, K> {
 
     private final Class<T> type;
-    protected final SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
+    protected Session session;
 
     public GenericDaoImpl(final SessionFactory sessionFactory,
             final Class<T> type) {
@@ -37,14 +39,13 @@ public abstract class GenericDaoImpl<T extends DomainObject, K extends Serializa
     @Override
     @SuppressWarnings("unchecked")
     public K create(final T o) {
-        return (K) this.sessionFactory.getCurrentSession().save(o);
+        return (K) getSession().save(o);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public T get(final K id) {
-        T value = (T) this.sessionFactory.getCurrentSession()
-                .get(this.type, id);
+        T value = (T) currentSession().get(this.type, id);
         if (value == null) {
             return null;
         }
@@ -60,23 +61,29 @@ public abstract class GenericDaoImpl<T extends DomainObject, K extends Serializa
     @Override
     @SuppressWarnings("unchecked")
     public List<T> getAll() {
-        return this.sessionFactory.getCurrentSession()
-                .createCriteria(this.type).list();
+        return getSession().createCriteria(this.type).list();
+    }
+
+    protected Session getSession() {
+        if (this.session == null || !this.session.isConnected()) {
+            this.session = this.sessionFactory.openSession();
+        }
+        return this.session;
     }
 
     @Override
     public void saveOrUpdate(final T o) {
-        this.sessionFactory.getCurrentSession().saveOrUpdate(o);
+        getSession().saveOrUpdate(o);
 
     }
 
     @Override
     public void update(final T o) {
-        this.sessionFactory.getCurrentSession().update(o);
+        getSession().update(o);
     }
 
     @Override
     public void delete(final T o) {
-        this.sessionFactory.getCurrentSession().delete(o);
+        getSession().delete(o);
     }
 }

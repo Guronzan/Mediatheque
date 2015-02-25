@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import fr.guronzan.mediatheque.mappingclasses.dao.CDDao;
 import fr.guronzan.mediatheque.mappingclasses.domain.CD;
 
+@Transactional
 @Repository("cdDao")
 @Scope("singleton")
 @SuppressWarnings("unchecked")
@@ -29,8 +32,7 @@ public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
     public CD getCdByTitle(final String title) {
         final StringBuffer hql = new StringBuffer("select cd from CD cd ");
         hql.append(" where cd.title=:title ");
-        final Query query = this.sessionFactory.getCurrentSession()
-                .createQuery(hql.toString());
+        final Query query = getSession().createQuery(hql.toString());
 
         query.setString("title", title);
         return (CD) query.uniqueResult();
@@ -40,8 +42,7 @@ public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
     public Collection<CD> getCdsByAuthor(final String name) {
         final StringBuffer hql = new StringBuffer("select cd from CD cd ");
         hql.append(" where cd.authorName=:name ");
-        final Query query = this.sessionFactory.getCurrentSession()
-                .createQuery(hql.toString());
+        final Query query = getSession().createQuery(hql.toString());
 
         query.setString("name", name);
         final Collection<CD> list = query.list();
