@@ -36,14 +36,14 @@ public class MySqlConnOverSSH {
 
 	@Test
 	public void TestJsch() throws JSchException, SQLException,
-	InstantiationException, IllegalAccessException,
-	ClassNotFoundException, URISyntaxException {
+			InstantiationException, IllegalAccessException,
+			ClassNotFoundException, URISyntaxException {
 		final int lport = 2222;
 		final String rhost = "localhost";
 		final String host = "5.135.147.2";
 		final int rport = 3306;
 		final String user = "testRemoteConnection";
-		final String password = "QyfkRg%MB$*C3hLn1Jgf";
+		// final String password = "QyfkRg%MB$*C3hLn1Jgf";
 		final String dbuserName = "remoteAccess";
 		final String dbpassword = "G5e@CFdj0k!hWM";
 		final String url = "jdbc:mysql://localhost:" + lport + "/mediatheque";
@@ -58,9 +58,9 @@ public class MySqlConnOverSSH {
 			JSch.setLogger(new JSCHLogger());
 			jsch.addIdentity(
 					getClass().getResource("/puttyKeys/privateKey.ppk").toURI()
-					.getPath(), "rsa-key-MediathequeClient");
+							.getPath(), "rsa-key-MediathequeClient");
 			session = jsch.getSession(user, host, 2222);
-			session.setPassword(password);
+		//	session.setPassword("");
 			session.setConfig(config);
 
 			// Set proxy for Tor
