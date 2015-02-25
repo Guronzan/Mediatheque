@@ -18,7 +18,7 @@ import fr.guronzan.mediatheque.mappingclasses.domain.Book;
 @Scope("singleton")
 @SuppressWarnings("unchecked")
 public class BookDaoImpl extends GenericDaoImpl<Book, Integer> implements
-        BookDao {
+BookDao {
 
     @Autowired
     public BookDaoImpl(
@@ -30,7 +30,8 @@ public class BookDaoImpl extends GenericDaoImpl<Book, Integer> implements
     public Book getBookByTitle(final String title) {
         final StringBuffer hql = new StringBuffer("select book from Book book ");
         hql.append(" where book.title=:title ");
-        final Query query = getSession().createQuery(hql.toString());
+        final Query query = this.sessionFactory.getCurrentSession()
+                .createQuery(hql.toString());
 
         query.setString("title", title);
         return (Book) query.uniqueResult();
@@ -40,7 +41,8 @@ public class BookDaoImpl extends GenericDaoImpl<Book, Integer> implements
     public Collection<Book> getBooksByAuthor(final String authorName) {
         final StringBuffer hql = new StringBuffer("select book from Book book");
         hql.append(" where book.authorName=:name ");
-        final Query query = getSession().createQuery(hql.toString());
+        final Query query = this.sessionFactory.getCurrentSession()
+                .createQuery(hql.toString());
 
         query.setString("name", authorName);
         final Collection<Book> books = query.list();
@@ -76,7 +78,8 @@ public class BookDaoImpl extends GenericDaoImpl<Book, Integer> implements
     public Collection<Book> getBooksByEditor(final String editor) {
         final StringBuffer hql = new StringBuffer("select book from Book book");
         hql.append(" where book.editor=:name ");
-        final Query query = getSession().createQuery(hql.toString());
+        final Query query = this.sessionFactory.getCurrentSession()
+                .createQuery(hql.toString());
 
         query.setString("name", editor);
         final Collection<Book> books = query.list();

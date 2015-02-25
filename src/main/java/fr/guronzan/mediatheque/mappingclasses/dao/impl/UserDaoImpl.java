@@ -34,7 +34,8 @@ public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements
         final StringBuffer hql = new StringBuffer("select user from User user ");
         hql.append(" where user.name=:name ");
         hql.append(" and user.forName=:forName ");
-        final Query query = getSession().createQuery(hql.toString());
+        final Query query = this.sessionFactory.getCurrentSession()
+                .createQuery(hql.toString());
 
         query.setString("name", name);
         query.setString("forName", forName);
@@ -45,7 +46,8 @@ public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements
     public User getUserByNickName(final String nickName) {
         final StringBuffer hql = new StringBuffer("select user from User user ");
         hql.append(" where user.nickName=:nickName ");
-        final Query query = getSession().createQuery(hql.toString());
+        final Query query = this.sessionFactory.getCurrentSession()
+                .createQuery(hql.toString());
 
         query.setString("nickName", nickName);
         return (User) query.uniqueResult();

@@ -29,7 +29,8 @@ public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
     public CD getCdByTitle(final String title) {
         final StringBuffer hql = new StringBuffer("select cd from CD cd ");
         hql.append(" where cd.title=:title ");
-        final Query query = getSession().createQuery(hql.toString());
+        final Query query = this.sessionFactory.getCurrentSession()
+                .createQuery(hql.toString());
 
         query.setString("title", title);
         return (CD) query.uniqueResult();
@@ -39,7 +40,8 @@ public class CDDaoImpl extends GenericDaoImpl<CD, Integer> implements CDDao {
     public Collection<CD> getCdsByAuthor(final String name) {
         final StringBuffer hql = new StringBuffer("select cd from CD cd ");
         hql.append(" where cd.authorName=:name ");
-        final Query query = getSession().createQuery(hql.toString());
+        final Query query = this.sessionFactory.getCurrentSession()
+                .createQuery(hql.toString());
 
         query.setString("name", name);
         final Collection<CD> list = query.list();
